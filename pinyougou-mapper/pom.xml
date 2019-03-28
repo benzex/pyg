@@ -44,5 +44,11 @@
             <artifactId>pinyougou-pojo</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <!-- 配置分页插件 -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+        </dependency>
     </dependencies>
 </project>

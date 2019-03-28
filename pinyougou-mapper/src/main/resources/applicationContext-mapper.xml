@@ -30,11 +30,11 @@
         <property name="mapperLocations" value="classpath:mappers/**/*.xml"/>
     </bean>
 
-    <!-- 3. 配置数据访问接口的代理对象 (批量配置)
+    <!-- 3. 配置数据访问接口的代理对象 (批量配置) (通用Mapper)
         到基础包下扫描所有的数据访问接口，再创建它们的代理对象，然后交给Spring容器
         bean的id: 默认为接口的类名，首字母小写
     -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.pinyougou.mapper"/>
     </bean>
 
