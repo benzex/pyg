@@ -1,8 +1,9 @@
 package com.pinyougou.mapper;
 
+import com.pinyougou.pojo.Specification;
 import tk.mybatis.mapper.common.Mapper;
 
-import com.pinyougou.pojo.Specification;
+import java.util.List;
 
 /**
  * SpecificationMapper 数据访问接口
@@ -11,6 +12,6 @@ import com.pinyougou.pojo.Specification;
  */
 public interface SpecificationMapper extends Mapper<Specification>{
 
-
-
+    /** 多条件查询规格 */
+    List<Specification> findAll(Specification specification);
 }

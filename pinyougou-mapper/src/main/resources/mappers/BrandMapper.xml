@@ -4,5 +4,34 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pinyougou.mapper.BrandMapper">
 
+	<!-- 多条件查询品牌 -->
+	<select id="findAll" resultType="Brand">
+		select * from tb_brand
+		<where>
+			<!-- 品牌名称
+				${name}: 不产生问号
+			-->
+			<if test="name != null and name !=''">
+				name like CONCAT('%',#{name},'%')
+			</if>
+			<!-- 品牌首字母 -->
+			<if test="firstChar != null and firstChar !=''">
+				and first_char = #{firstChar}
+			</if>
+		</where>
+	</select>
 
+    <!-- 批量删除 -->
+    <delete id="deleteAll">
+        DELETE FROM tb_brand WHERE id IN
+        <!--
+            collection:
+              Serializable[] ids : array
+              List<Long> ids: list
+              @Param("ids") Serializable[] ids: ids
+        -->
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

@@ -1,5 +1,6 @@
 package com.pinyougou.service;
 
+import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Specification;
 import java.util.List;
 import java.io.Serializable;
@@ -29,6 +30,6 @@ public interface SpecificationService {
 	List<Specification> findAll();
 
 	/** 多条件分页查询 */
-	List<Specification> findByPage(Specification specification, int page, int rows);
+	PageResult findByPage(Specification specification, int page, int rows);
 
 }

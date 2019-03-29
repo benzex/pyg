@@ -1,9 +1,8 @@
 package com.pinyougou.pojo;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-
-import javax.persistence.*;
 
 /**
  * 规格实体类
@@ -24,7 +23,7 @@ public class Specification implements Serializable{
 	@Column(name="spec_name")
     private String specName;
     /** 规格属性集合 */
-	@Transient
+	@Transient // 代表该属性不是表中的列
     private List<SpecificationOption> specificationOptions; 
     
     /** setter and getter method */
