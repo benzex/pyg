@@ -7,6 +7,9 @@ import com.pinyougou.service.SpecificationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 规格控制器
  *
@@ -47,5 +50,11 @@ public class SpecificationController {
             ex.printStackTrace();
         }
         return false;
+    }
+
+    /** 查询规格列表  */
+    @GetMapping("/findSpecList")
+    public List<Map<String,Object>> findSpecList(){
+        return specificationService.findAllByIdAndName();
     }
 }

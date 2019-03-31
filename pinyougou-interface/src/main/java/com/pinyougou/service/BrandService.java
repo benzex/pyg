@@ -5,6 +5,8 @@ import com.pinyougou.pojo.Brand;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+
 /**
  * BrandService 服务接口
  * @date 2019-03-28 09:58:00
@@ -33,4 +35,6 @@ public interface BrandService {
 	/** 多条件分页查询 */
 	PageResult findByPage(Brand brand, int page, int rows);
 
+	/** 查询品牌列表(id与name) */
+    List<Map<String,Object>> findAllByIdAndName();
 }

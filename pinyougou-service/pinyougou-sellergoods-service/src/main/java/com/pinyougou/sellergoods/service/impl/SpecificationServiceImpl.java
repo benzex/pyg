@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 规格服务接口实现类
@@ -88,6 +89,15 @@ public class SpecificationServiceImpl implements SpecificationService {
                 }
             });
             return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /** 查询规格列表 */
+    public List<Map<String,Object>> findAllByIdAndName(){
+        try {
+            return specificationMapper.findAllByIdAndName();
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }

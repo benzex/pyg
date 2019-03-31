@@ -40,6 +40,14 @@ app.controller('typeTemplateController', function($scope, $controller, baseServi
     $scope.show = function(entity){
        /** 把json对象转化成一个新的json对象 */
        $scope.entity = JSON.parse(JSON.stringify(entity));
+
+       // 把品牌json数组的字符串转化成json数组
+        $scope.entity.brandIds = JSON.parse($scope.entity.brandIds);
+       // 把规格json数组的字符串转化成json数组
+        $scope.entity.specIds = JSON.parse($scope.entity.specIds);
+       // 把扩展属性json数组的字符串转化成json数组
+        $scope.entity.customAttributeItems = JSON.parse($scope.entity.customAttributeItems);
+
     };
 
     /** 批量删除 */
@@ -50,6 +58,8 @@ app.controller('typeTemplateController', function($scope, $controller, baseServi
                     if (response.data){
                         /** 重新加载数据 */
                         $scope.reload();
+                        /** 清空ids数组 */
+                        $scope.ids = [];
                     }else{
                         alert("删除失败！");
                     }
@@ -58,4 +68,41 @@ app.controller('typeTemplateController', function($scope, $controller, baseServi
             alert("请选择要删除的记录！");
         }
     };
+
+    // 查询品牌数据
+    $scope.findBrandList = function () {
+        // 发送异步请求
+        baseService.sendGet("/brand/findBrandList").then(function(response){
+            // 获取响应数据 response.data: [{id :1, text : '华为'}]
+            /**
+             * {data : [{id :1, text : '华为'}]}
+             */
+            $scope.brandList = {data : response.data};
+        });
+    };
+
+    // 查询规格数据
+    $scope.findSpecList = function () {
+        // 发送异步请求
+        baseService.sendGet("/specification/findSpecList").then(function(response){
+            // 获取响应数据 response.data: [{id :1, text : ''}]
+            /**
+             * {data : [{id :1, text : ''}]}
+             */
+            $scope.specList = {data : response.data};
+        });
+    };
+
+    // 新增一行
+    // {name:'',specIds:'[{},{}]',brandIds:'[{},{}]',customAttributeItems:'[{},{}]'}
+    $scope.addTableRow = function () {
+        $scope.entity.customAttributeItems.push({});
+    };
+    // 删除一行
+    $scope.deleteTableRow = function (idx) {
+        $scope.entity.customAttributeItems.splice(idx,1);
+    };
+
+
+
 });

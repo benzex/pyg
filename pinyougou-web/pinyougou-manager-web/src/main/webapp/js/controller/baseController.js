@@ -41,5 +41,21 @@ app.controller('baseController', function ($scope) {
         }
     };
 
+    /** 提取数组中json某个属性，返回拼接的字符串(逗号分隔) */
+    $scope.jsonArr2Str = function (jsonArrStr, key) {
+        // 把json数组的字符串转化成json数组
+        var jsonArr = JSON.parse(jsonArrStr);
+
+        var resArr = [];
+        // 循环数组
+        for (var i = 0; i < jsonArr.length; i++){
+            // json : {id : '', text: ''}
+            var json = jsonArr[i];
+            resArr.push(json[key]);
+        }
+        // join: 把数组元素用什么隔开，返回一个字符串
+        return resArr.join(",");
+    };
+
 
 });

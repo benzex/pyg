@@ -1,8 +1,11 @@
 package com.pinyougou.mapper;
 
+import com.pinyougou.pojo.TypeTemplate;
+import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
-import com.pinyougou.pojo.TypeTemplate;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * TypeTemplateMapper 数据访问接口
@@ -11,6 +14,9 @@ import com.pinyougou.pojo.TypeTemplate;
  */
 public interface TypeTemplateMapper extends Mapper<TypeTemplate>{
 
+    /** 多条件查询类型模板 */
+    List<TypeTemplate> findAll(TypeTemplate typeTemplate);
 
-
+    /** 批量删除 */
+    void deleteAll(@Param("ids") Serializable[] ids);
 }

@@ -1,10 +1,12 @@
 package com.pinyougou.mapper;
 
 import com.pinyougou.pojo.Brand;
+import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * BrandMapper 数据访问接口
@@ -18,4 +20,8 @@ public interface BrandMapper extends Mapper<Brand>{
 
     /** 批量删除 */
     void deleteAll(Serializable[] ids);
+
+    /** 查询品牌列表(id与name) */
+    @Select("SELECT id,NAME AS text FROM tb_brand")
+    List<Map<String,Object>> findAllByIdAndName();
 }

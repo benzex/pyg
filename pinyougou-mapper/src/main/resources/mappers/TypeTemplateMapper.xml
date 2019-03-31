@@ -5,4 +5,21 @@
 
 <mapper namespace="com.pinyougou.mapper.TypeTemplateMapper">
 
+	<!-- 多条件查询类型模板 -->
+	<select id="findAll" resultType="TypeTemplate">
+		  select * from tb_type_template
+		  <where>
+			  <if test="name != null and name !=''">
+				  name like CONCAT('%',#{name},'%')
+			  </if>
+		  </where>
+	</select>
+
+	<!--  批量删除 -->
+	<delete id="deleteAll">
+		delete from tb_type_template where id IN
+		<foreach collection="ids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
 </mapper>

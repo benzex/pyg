@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务接口实现类
@@ -78,6 +79,16 @@ public class BrandServiceImpl implements BrandService {
                 }
             });
             return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /** 查询品牌列表(id与name) */
+    public List<Map<String,Object>> findAllByIdAndName(){
+        try{
+            // [{id:1,text:''},{id:2, text: ''}]
+            return brandMapper.findAllByIdAndName();
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
