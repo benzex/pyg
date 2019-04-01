@@ -5,7 +5,7 @@ app.controller('sellerController', function($scope, $controller, baseService){
     $controller('baseController',{$scope:$scope});
 
     /** 查询条件对象 */
-    $scope.searchEntity = {};
+    $scope.searchEntity = {status : '0'};
     /** 分页查询(查询条件) */
     $scope.search = function(page, rows){
         baseService.findByPage("/seller/findByPage", page,
@@ -17,6 +17,37 @@ app.controller('sellerController', function($scope, $controller, baseService){
                 $scope.paginationConf.totalItems = response.data.total;
             });
     };
+    /** 显示修改 */
+    $scope.show = function(entity){
+        /** 把json对象转化成一个新的json对象 */
+        $scope.entity = JSON.parse(JSON.stringify(entity));
+    };
+
+    /** 商家审核 */
+    $scope.updateStatus = function (sellerId, status) {
+        // 发送异步请求
+        baseService.sendGet("/seller/updateStatus?sellerId="
+            + sellerId + "&status=" + status).then(function(response){
+                // 获取响应数据
+                if (response.data){
+                    // 重新加载数据
+                    $scope.reload();
+                }else{
+                    alert("审核失败！");
+                }
+        });
+    };
+
+
+
+
+
+
+
+
+
+
+
 
     /** 添加或修改 */
     $scope.saveOrUpdate = function(){
@@ -36,11 +67,7 @@ app.controller('sellerController', function($scope, $controller, baseService){
             });
     };
 
-    /** 显示修改 */
-    $scope.show = function(entity){
-       /** 把json对象转化成一个新的json对象 */
-       $scope.entity = JSON.parse(JSON.stringify(entity));
-    };
+
 
     /** 批量删除 */
     $scope.delete = function(){

@@ -30,15 +30,15 @@
 						<img src="../img/wx_cz.jpg" />
 					</div>
 					<div id="profile" class="tab-pane  active">
-						<form class="sui-form">
+						<form action="/login" method="post" class="sui-form">
 							<div class="input-prepend">
 								<span class="add-on loginname"></span>
-								<input id="prependedInput" type="text" 
+								<input  type="text" name="username"
 								placeholder="邮箱/用户名/手机号" class="span2 input-xfat"/>
 							</div>
 							<div class="input-prepend">
 								<span class="add-on loginpwd"></span>
-								<input id="prependedInput" type="password" 
+								<input type="password" name="password"
 								placeholder="请输入密码" class="span2 input-xfat"/>
 							</div>
 							<div class="setting">
@@ -49,7 +49,9 @@
 								</div>
 							</div>
 							<div class="logined">
-								<a class="sui-btn btn-block btn-xlarge btn-danger">登&nbsp;&nbsp;录</a>
+								<input type="submit"
+									   value="登&nbsp;&nbsp;录"
+									   class="sui-btn btn-block btn-xlarge btn-danger"/>
 							</div>
 						</form>
 					</div>
