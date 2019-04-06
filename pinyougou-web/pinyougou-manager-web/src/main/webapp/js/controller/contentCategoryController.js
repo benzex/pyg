@@ -1,5 +1,5 @@
 /** 定义控制器层 */
-app.controller('goodsController', function($scope, $controller, baseService){
+app.controller('contentCategoryController', function($scope, $controller, baseService){
 
     /** 指定继承baseController */
     $controller('baseController',{$scope:$scope});
@@ -8,7 +8,7 @@ app.controller('goodsController', function($scope, $controller, baseService){
     $scope.searchEntity = {};
     /** 分页查询(查询条件) */
     $scope.search = function(page, rows){
-        baseService.findByPage("/goods/findByPage", page,
+        baseService.findByPage("/contentCategory/findByPage", page,
 			rows, $scope.searchEntity)
             .then(function(response){
                 /** 获取分页查询结果 */
@@ -18,31 +18,34 @@ app.controller('goodsController', function($scope, $controller, baseService){
             });
     };
 
-    // 商品的审核与驳回
-    $scope.updateStatus = function (status) {
-        if ($scope.ids.length > 0){
-            baseService.sendGet("/goods/updateStatus?status="
-                + status + "&ids=" + $scope.ids).then(function(response){
-                    // 获取响应数据
-                    if (response.data){
-                        // 重新加载数据
-                        $scope.reload();
-                        // 清空ids数组
-                        $scope.ids = [];
-                    }else{
-                        alert("审核失败！");
-                    }
-            });
-        }else {
-            alert("请选择要审核的商品！");
+    /** 添加或修改 */
+    $scope.saveOrUpdate = function(){
+        var url = "save";
+        if ($scope.entity.id){
+            url = "update";
         }
+        /** 发送post请求 */
+        baseService.sendPost("/contentCategory/" + url, $scope.entity)
+            .then(function(response){
+                if (response.data){
+                    /** 重新加载数据 */
+                    $scope.reload();
+                }else{
+                    alert("操作失败！");
+                }
+            });
     };
 
+    /** 显示修改 */
+    $scope.show = function(entity){
+       /** 把json对象转化成一个新的json对象 */
+       $scope.entity = JSON.parse(JSON.stringify(entity));
+    };
 
-    /** 删除商品(修改商品删除的状态码) */
+    /** 批量删除 */
     $scope.delete = function(){
         if ($scope.ids.length > 0){
-            baseService.sendGet("/goods/delete?ids=" + $scope.ids)
+            baseService.deleteById("/contentCategory/delete", $scope.ids)
                 .then(function(response){
                     if (response.data){
                         /** 重新加载数据 */

@@ -10,9 +10,23 @@
 	    <link rel="stylesheet" href="/css/style.css"/>
 		<script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	    <script src="/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+		<script src="/plugins/angularjs/angular.min.js"></script>
+		<!-- 分页标签 -->
+		<link rel="stylesheet" href="/plugins/angularjs/pagination.css"/>
+		<script src="/plugins/angularjs/pagination.js"></script>
+		<!-- 分页标签 -->
+
+		<script src="/js/base-pagination.js"></script>
+		<script src="/js/service/baseService.js"></script>
+		<script src="/js/controller/baseController.js"></script>
+		<script src="/js/controller/goodsController.js"></script>
+
 	</head>
 
-	<body class="hold-transition skin-red sidebar-mini" >
+	<body ng-app="pinyougou"
+		  ng-controller="goodsController"
+		  class="hold-transition skin-red sidebar-mini" >
 	  	<!-- .box-body -->
 		<div class="box-header with-border">
 			<h3 class="box-title">商品审核</h3>
@@ -24,16 +38,23 @@
 				<div class="pull-left">
 					<div class="form-group form-inline">
 						<div class="btn-group">
-							<button type="button" class="btn btn-default" title="删除">
+							<button type="button" class="btn btn-default"
+									ng-click="delete()"
+									title="删除">
 								<i class="fa fa-trash-o"></i> 删除
 							</button>
-							<button type="button" class="btn btn-default" title="审核通过">
+							<button type="button" class="btn btn-default"
+									ng-click="updateStatus('1')"
+									title="审核通过">
 								<i class="fa fa-check"></i> 审核通过
 							</button>
-							<button type="button" class="btn btn-default" title="驳回">
+							<button type="button" class="btn btn-default"
+									ng-click="updateStatus('2')"
+									title="驳回">
 								<i class="fa fa-ban"></i> 驳回
 							</button>
-							<button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();">
+							<button type="button" class="btn btn-default" title="刷新"
+									onclick="window.location.reload();">
 								<i class="fa fa-refresh"></i> 刷新
 							</button>
 						</div>
@@ -41,8 +62,8 @@
 				</div>
 				<div class="box-tools pull-right">
 					<div class="has-feedback">
-						商品名称：<input>
-						<button class="btn btn-default">查询</button>
+						商品名称：<input ng-model="searchEntity.goodsName"/>
+						<button class="btn btn-default" ng-click="reload()">查询</button>
 					</div>
 				</div>
 				<!--工具栏/-->
@@ -64,39 +85,22 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>1</td>
-							<td>华为Mete8</td>
-							<td>3020</td>
-							<td>数码产品</td>
-							<td>手机</td>
-							<td>国产手机</td>
-							<td><span> 申请中 </span></td>
+						<tr ng-repeat="entity in dataList">
+							<td><input  type="checkbox"
+										ng-click="updateSelection($event,entity.id);"></td>
+							<td>{{entity.id}}</td>
+							<td>{{entity.goodsName}}</td>
+							<td>{{entity.price}}</td>
+							<td>{{entity.category1Name}}</td>
+							<td>{{entity.category2Name}}</td>
+							<td>{{entity.category3Name}}</td>
+							<td>未审核</td>
 						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>2</td>
-							<td>三星手雷</td>
-							<td>1080</td>
-							<td>数码产品</td>
-							<td>手机</td>
-							<td>进口手机</td>
-							<td><span> 已驳回 </span></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>3</td>
-							<td>小米6S</td>
-							<td>999</td>
-							<td>数码产品</td>
-							<td>手机</td>
-							<td>国产手机</td>
-							<td><span> 审核通过 </span></td>
-						</tr>
+
 					</tbody>
 				</table>
 				<!--数据列表/-->
+				<tm-pagination conf="paginationConf"/>
 			</div>
 			<!-- 数据表格 /-->
 		</div>

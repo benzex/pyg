@@ -8,22 +8,31 @@
 	<select id="findAll" resultType="map">
 		SELECT id,goods_name AS goodsName,price,
 		audit_status AS auditStatus,category1_id AS category1Id,
-		category2_id AS category2Id,category3_id AS category3Id
-		FROM `tb_goods`
-		<where>
-			<!-- 商家id -->
-			<if test="sellerId != null and sellerId !=''">
-				seller_id = #{sellerId}
-			</if>
-			<!-- 商品名称 -->
-			<if test="goodsName != null and goodsName !=''">
-				and goods_name like CONCAT('%',#{goodsName},'%')
-			</if>
-			<!-- 商品状态 -->
-			<if test="auditStatus != null and auditStatus !=''">
-				and audit_status = #{auditStatus}
-			</if>
-		</where>
+		category2_id AS category2Id,category3_id AS category3Id,
+		is_marketable AS isMarketable
+		FROM `tb_goods` where is_delete is NULL
+
+		<!-- 商家id -->
+		<if test="sellerId != null and sellerId !=''">
+			and seller_id = #{sellerId}
+		</if>
+		<!-- 商品名称 -->
+		<if test="goodsName != null and goodsName !=''">
+			and goods_name like CONCAT('%',#{goodsName},'%')
+		</if>
+		<!-- 商品状态 -->
+		<if test="auditStatus != null and auditStatus !=''">
+			and audit_status = #{auditStatus}
+		</if>
 		order by id asc
 	</select>
+
+
+	<!-- 修改商品的状态码 -->
+	<update id="updateStatus">
+		UPDATE tb_goods SET ${columnName} = #{status} WHERE id IN
+		<foreach collection="ids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
 </mapper>

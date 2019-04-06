@@ -10,11 +10,25 @@
 	    <link rel="stylesheet" href="/css/style.css"/>
 		<script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	    <script src="/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+		<script src="/plugins/angularjs/angular.min.js"></script>
+		<!-- 分页标签 -->
+		<link rel="stylesheet" href="/plugins/angularjs/pagination.css"/>
+		<script src="/plugins/angularjs/pagination.js"></script>
+		<!-- 分页标签 -->
+
+		<script src="/js/base-pagination.js"></script>
+		<script src="/js/service/baseService.js"></script>
+		<script src="/js/controller/baseController.js"></script>
+		<script src="/js/controller/contentCategoryController.js"></script>
 	    
 	   
 	</head>
 
-	<body class="hold-transition skin-red sidebar-mini">
+	<body ng-app="pinyougou"
+		  ng-controller="contentCategoryController"
+		  class="hold-transition skin-red sidebar-mini">
+
 		<!-- .box-body -->
 		<div class="box-header with-border">
 			<h3 class="box-title">广告分类管理</h3>
@@ -28,10 +42,12 @@
 						<div class="btn-group">
 							<button type="button" class="btn btn-default" title="新建"
 									data-toggle="modal" data-target="#editModal"
-									>
+									ng-click="entity={}">
 								<i class="fa fa-file-o"></i> 新建
 							</button>
-							<button type="button" class="btn btn-default" title="删除">
+							<button type="button" class="btn btn-default"
+									ng-click="delete()"
+									title="删除">
 								<i class="fa fa-trash-o"></i> 删除
 							</button>
 							<button type="button" class="btn btn-default" title="刷新"
@@ -58,18 +74,21 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><input type="checkbox"></td>
+						<tr ng-repeat="entity in dataList">
+							<td><input type="checkbox"
+									   ng-click="updateSelection($event,entity.id)"></td>
 							<td>{{entity.id}}</td>
 							<td>{{entity.name}}</td>
 							<td class="text-center">
 								<button type="button" class="btn bg-olive btn-xs"
+										ng-click="show(entity)"
 									data-toggle="modal" data-target="#editModal">修改</button>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 				<!--数据列表/-->
+				<tm-pagination conf="paginationConf"/>
 				
 			</div>
 			<!-- 数据表格 /-->
@@ -99,7 +118,9 @@
 	
 					</div>
 					<div class="modal-footer">
-						<button class="btn btn-success" data-dismiss="modal"
+						<button class="btn btn-success"
+								ng-click="saveOrUpdate()"
+								data-dismiss="modal"
 							aria-hidden="true">保存</button>
 						<button class="btn btn-default" data-dismiss="modal"
 							aria-hidden="true">关闭</button>

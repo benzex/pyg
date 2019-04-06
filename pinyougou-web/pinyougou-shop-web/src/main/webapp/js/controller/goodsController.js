@@ -254,35 +254,23 @@ app.controller('goodsController', function($scope, $controller, baseService){
 
 
 
-
-
-
-
-
-
-
-
-
-    /** 显示修改 */
-    $scope.show = function(entity){
-       /** 把json对象转化成一个新的json对象 */
-       $scope.entity = JSON.parse(JSON.stringify(entity));
-    };
-
-    /** 批量删除 */
-    $scope.delete = function(){
+    /** 商品上下架操作 */
+    $scope.updateMarketable = function(status){
         if ($scope.ids.length > 0){
-            baseService.deleteById("/goods/delete", $scope.ids)
+            baseService.sendGet("/goods/updateMarketable?ids="
+                + $scope.ids + "&status=" + status)
                 .then(function(response){
                     if (response.data){
                         /** 重新加载数据 */
                         $scope.reload();
+                        // 清空ids
+                        $scope.ids = [];
                     }else{
-                        alert("删除失败！");
+                        alert("上下架失败！");
                     }
                 });
         }else{
-            alert("请选择要删除的记录！");
+            alert("请选择要上下架的商品！");
         }
     };
 });

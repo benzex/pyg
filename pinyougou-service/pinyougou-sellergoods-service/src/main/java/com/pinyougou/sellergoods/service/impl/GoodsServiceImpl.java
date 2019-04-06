@@ -202,4 +202,14 @@ public class GoodsServiceImpl implements GoodsService {
             throw new RuntimeException(ex);
         }
     }
+
+    /** 修改商品的状态码 */
+    public void updateStatus(String columnName, Long[] ids, String status){
+        try{
+            // UPDATE tb_goods SET audit_status = ? WHERE id IN (?,?)
+            goodsMapper.updateStatus(columnName, ids, status);
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
 }
