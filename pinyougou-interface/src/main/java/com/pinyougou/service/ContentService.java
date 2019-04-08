@@ -33,4 +33,6 @@ public interface ContentService {
 	/** 多条件分页查询 */
 	PageResult findByPage(Content content, int page, int rows);
 
+	/** 查询广告数据 */
+    List<Content> findContentByCategoryId(Long categoryId);
 }

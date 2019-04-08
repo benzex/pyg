@@ -11,9 +11,12 @@
        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <!-- 配置加载属性文件 -->
-    <context:property-placeholder location="classpath:props/*.properties"/>
+    <context:property-placeholder location="classpath*:props/*.properties"/>
     <!-- 导入数据访问层的配置文件(mybatis整合spring的配置文件) -->
     <import resource="classpath:applicationContext-mapper.xml"/>
+    <!-- 导入访问Redis数据库配置文件(spring-data-redis) -->
+    <import resource="classpath:applicationContext-redis.xml"/>
+
 
     <!--########### 配置Dubbo服务提供者 ############-->
     <!-- 配置当前应用的名称 -->
