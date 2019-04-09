@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:solr="http://www.springframework.org/schema/data/solr"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+       http://www.springframework.org/schema/data/solr
+       http://www.springframework.org/schema/data/solr/spring-solr.xsd">
+
+    <!-- 配置加载属性文件 -->
+    <context:property-placeholder location="classpath*:props/*.properties"/>
+
+    <!-- ########### 配置SpringDataSolr整合Solrj ######### -->
+    <!-- 配置SolrServer -->
+    <solr:solr-server id="solrServer" url="${collection}"/>
+
+    <!-- 配置SolrTemplate，它可以对Solr服务器中的索引库做CRUD操作 -->
+    <bean id="solrTemplate" class="org.springframework.data.solr.core.SolrTemplate">
+        <constructor-arg name="solrServer" ref="solrServer"/>
+    </bean>
+
+
+
+
+
+    <!--########### 配置Dubbo服务提供者 ############-->
+    <!-- 配置当前应用的名称 -->
+    <dubbo:application name="pinyougou-search-service"/>
+
+    <!-- 使用zookeeper注册服务地址 -->
+    <dubbo:registry address="zookeeper://192.168.12.131:2181" />
+
+    <!-- 用dubbo协议在20882端口暴露服务(产生服务地址) -->
+    <dubbo:protocol name="dubbo" port="20882"/>
+
+    <!-- 配置包扫描的方式暴露服务 -->
+    <dubbo:annotation package="com.pinyougou.search.service.impl"/>
+
+</beans>
