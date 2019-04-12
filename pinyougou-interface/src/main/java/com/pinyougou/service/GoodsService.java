@@ -4,6 +4,8 @@ import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Goods;
 import java.util.List;
 import java.io.Serializable;
+import java.util.Map;
+
 /**
  * GoodsService 服务接口
  * @date 2019-03-28 09:58:00
@@ -34,4 +36,7 @@ public interface GoodsService {
 
 	/** 修改商品的状态码 */
     void updateStatus(String columnName, Long[] ids, String status);
+
+    /** 根据spu的id查询商品信息 */
+    Map<String,Object> getGoods(Long goodsId);
 }

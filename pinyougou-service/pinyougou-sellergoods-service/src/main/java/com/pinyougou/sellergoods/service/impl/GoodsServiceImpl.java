@@ -11,9 +11,11 @@ import com.pinyougou.pojo.*;
 import com.pinyougou.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -208,6 +210,51 @@ public class GoodsServiceImpl implements GoodsService {
         try{
             // UPDATE tb_goods SET audit_status = ? WHERE id IN (?,?)
             goodsMapper.updateStatus(columnName, ids, status);
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /** 根据spu的id查询商品信息 */
+    public Map<String,Object> getGoods(Long goodsId){
+        try{
+            Map<String,Object> dataModel = new HashMap<>();
+
+            // 1. 查询tb_goods
+            Goods goods = goodsMapper.selectByPrimaryKey(goodsId);
+
+            // 2. 查询tb_goods_desc
+            GoodsDesc goodsDesc = goodsDescMapper.selectByPrimaryKey(goodsId);
+
+            // 3. 查询tb_item
+            // SELECT * FROM tb_item WHERE goods_id = 149187842867973 ORDER BY is_default DESC
+            Example example = new Example(Item.class);
+            // 创建条件对象
+            Example.Criteria criteria = example.createCriteria();
+            //  goods_id = 149187842867973
+            criteria.andEqualTo("goodsId", goodsId);
+            //  ORDER BY is_default DESC
+            example.orderBy("isDefault").desc();
+            // 条件查询
+            List<Item> itemList = itemMapper.selectByExample(example);
+
+
+            dataModel.put("goods", goods);
+            dataModel.put("goodsDesc", goodsDesc);
+            dataModel.put("itemList", JSON.toJSONString(itemList));
+
+            // 查询一级分类名称
+            ItemCat itemCat1 = itemCatMapper.selectByPrimaryKey(goods.getCategory1Id());
+            dataModel.put("itemCat1", itemCat1 != null ? itemCat1.getName() : "");
+
+            // 查询二级分类名称
+            ItemCat itemCat2 = itemCatMapper.selectByPrimaryKey(goods.getCategory2Id());
+            dataModel.put("itemCat2", itemCat2 != null ? itemCat2.getName() : "");
+
+            // 查询三级分类名称
+            ItemCat itemCat3 = itemCatMapper.selectByPrimaryKey(goods.getCategory3Id());
+            dataModel.put("itemCat3", itemCat3 != null ? itemCat3.getName() : "");
+            return dataModel;
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
