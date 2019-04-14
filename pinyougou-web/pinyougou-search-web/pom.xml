@@ -14,4 +14,17 @@
         <!-- 覆盖父工程中的port属性 -->
         <port>9104</port>
     </properties>
+
+    <dependencies>
+        <!-- activemq-client -->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+        </dependency>
+        <!-- spring-jms -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+        </dependency>
+    </dependencies>
 </project>

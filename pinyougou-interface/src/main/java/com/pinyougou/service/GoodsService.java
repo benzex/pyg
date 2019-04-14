@@ -2,6 +2,8 @@ package com.pinyougou.service;
 
 import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Goods;
+import com.pinyougou.pojo.Item;
+
 import java.util.List;
 import java.io.Serializable;
 import java.util.Map;
@@ -39,4 +41,7 @@ public interface GoodsService {
 
     /** 根据spu的id查询商品信息 */
     Map<String,Object> getGoods(Long goodsId);
+
+    /** 根据多个goodsId从tb_item表查询多个SKU商品数据 */
+    List<Item> findItemByGoodsId(Long[] goodsIds);
 }

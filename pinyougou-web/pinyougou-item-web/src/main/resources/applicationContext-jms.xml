@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/jms
+       http://www.springframework.org/schema/jms/spring-jms.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 加载属性文件 -->
+    <context:property-placeholder location="classpath:application.properties"/>
+
+    <!--########### 通用配置 #############-->
+    <!-- 配置ActiveMQ连接工厂 -->
+    <bean id="activeMQConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <!-- 设置消息中间件的连接地址 -->
+        <property name="brokerURL" value="${brokerURL}"/>
+    </bean>
+    <!-- 配置SpringJMS的单例连接工厂 -->
+    <bean id="singleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+        <!-- 把ActiveMQ的连接工厂交给SpringJMS管理 -->
+        <property name="targetConnectionFactory" ref="activeMQConnectionFactory"/>
+    </bean>
+
+    <!--########### 配置消息消费者 #############-->
+    <!-- 配置消息监听器容器
+        connection-factory: 连接工厂
+        destination-type: 目的地的类型: queue|topic
+    -->
+    <jms:listener-container connection-factory="singleConnectionFactory"
+                            destination-type="topic">
+        <!-- 配置消息监听器
+            destination: 主题的名称
+            ref: 引用消息监听器类
+         -->
+        <jms:listener destination="page.topic" ref="pageMessageListener"/>
+        <jms:listener destination="page.delete.topic" ref="deleteMessageListener"/>
+    </jms:listener-container>
+
+    <!-- 配置自定义消息监听器类 -->
+    <bean id="pageMessageListener" class="com.pinyougou.item.listener.PageMessageListener"/>
+    <bean id="deleteMessageListener" class="com.pinyougou.item.listener.DeleteMessageListener"/>
+
+
+</beans>

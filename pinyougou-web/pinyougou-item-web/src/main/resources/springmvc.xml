@@ -46,6 +46,6 @@
     <dubbo:registry address="zookeeper://192.168.12.131:2181" />
 
     <!-- 配置包扫描的方式引用服务(它底层实现层的组件扫描) -->
-    <dubbo:annotation package="com.pinyougou.item.controller"/>
+    <dubbo:annotation package="com.pinyougou.item"/>
 
 </beans>

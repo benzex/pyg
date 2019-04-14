@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.service.ItemSearchService;
 import com.pinyougou.solr.SolrItem;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
@@ -12,6 +13,7 @@ import org.springframework.data.solr.core.query.result.HighlightEntry;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.core.query.result.ScoredPage;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,42 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 
     @Autowired
     private SolrTemplate solrTemplate;
+
+    /** 添加或修改索引 */
+    public void saveOrUpdate(List<SolrItem> solrItems){
+        try{
+            UpdateResponse updateResponse = solrTemplate.saveBeans(solrItems);
+            if (updateResponse.getStatus() == 0){
+                solrTemplate.commit();
+            }else {
+                solrTemplate.rollback();
+            }
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /** 删除索引 */
+    public void delete(Long[] goodsIds){
+        try{
+            // 创建查询对象
+            Query query = new SimpleQuery();
+            // 创建条件对象
+            Criteria criteria = new Criteria("goodsId").is(Arrays.asList(goodsIds));
+            // 添加条件对象
+            query.addCriteria(criteria);
+            // 删除
+            UpdateResponse updateResponse = solrTemplate.delete(query);
+            if (updateResponse.getStatus() == 0){
+                solrTemplate.commit();
+            }else {
+                solrTemplate.rollback();
+            }
+
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
 
     /** 搜索方法 */
     public Map<String,Object> search(Map<String, Object> params){
