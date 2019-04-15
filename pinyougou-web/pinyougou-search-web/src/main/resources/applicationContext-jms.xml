@@ -29,8 +29,12 @@
     <!-- 配置消息监听器容器
         connection-factory: 连接工厂
         destination-type: 目的地的类型: queue|topic
+        acknowledge="transacted": 开启事务
+        receive-timeout: 接收超时
     -->
     <jms:listener-container connection-factory="singleConnectionFactory"
+                            acknowledge="transacted"
+                            receive-timeout="10000"
                             destination-type="queue">
         <!-- 配置消息监听器
             destination: 队列的名称

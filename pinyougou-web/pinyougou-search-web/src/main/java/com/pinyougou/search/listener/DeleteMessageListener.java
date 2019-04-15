@@ -32,7 +32,11 @@ public class DeleteMessageListener implements SessionAwareMessageListener<Object
             // 2. 删除索引库中的索引
             itemSearchService.delete(goodsIds);
 
+            // 提交事务
+            session.commit();
         }catch (Exception ex){
+            // 回滚事务
+            session.rollback();
             throw new RuntimeException(ex);
         }
     }

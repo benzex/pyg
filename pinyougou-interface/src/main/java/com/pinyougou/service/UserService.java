@@ -31,4 +31,9 @@ public interface UserService {
 	/** 多条件分页查询 */
 	List<User> findByPage(User user, int page, int rows);
 
+	/** 发送短信验证码 */
+	boolean sendSmsCode(String phone);
+
+	/** 检验验证码是否正确 */
+	boolean checkSmsCode(String phone, String code);
 }

@@ -69,8 +69,11 @@ public class ItemMessageListener implements SessionAwareMessageListener<ObjectMe
 
             // 4. 调用搜索服务完成索引创建
             itemSearchService.saveOrUpdate(solrItems);
-
+            // 提交事务
+            session.commit();
         }catch (Exception ex){
+            // 回滚事务
+            session.rollback();
             throw new RuntimeException(ex);
         }
     }

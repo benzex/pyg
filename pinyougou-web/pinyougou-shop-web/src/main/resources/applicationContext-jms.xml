@@ -31,6 +31,8 @@
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
         <!-- 设置连接工厂 -->
         <property name="connectionFactory" ref="singleConnectionFactory"/>
+        <!-- 开启消息事务 -->
+        <property name="sessionTransacted" value="true"/>
     </bean>
 
     <!-- 配置目的地(创建商品索引) -->
