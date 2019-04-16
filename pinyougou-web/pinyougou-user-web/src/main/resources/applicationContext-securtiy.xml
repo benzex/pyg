@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--################ 配置请求URL拦截规则 ###############-->
+    <!-- 配置哪些URL不需要拦截 -->
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+    <security:http pattern="/register.html" security="none"/>
+    <security:http pattern="/user/save" security="none"/>
+    <security:http pattern="/user/sendSmsCode" security="none"/>
+
+
+    <!-- 配置哪些URL需要拦截
+        entry-point-ref: 认证的入口
+     -->
+    <security:http entry-point-ref="casAuthenticationEntryPoint">
+        <!-- 配置哪些请求URL需要拦截，用什么角色或权限访问 -->
+        <security:intercept-url pattern="/**" access="hasRole('USER')"/>
+        <!-- 关闭跨站请求伪造 CSRF -->
+        <security:csrf disabled="true"/>
+
+        <!--
+            配置过滤器链
+            position: 指定过滤是什么类型 CAS_FILTER
+
+        -->
+        <security:custom-filter ref="casAuthenticationFilter" position="CAS_FILTER"/>
+
+        <!-- 配置SpringSecurity的退出过滤器 -->
+        <security:custom-filter ref="logoutFilter" before="LOGOUT_FILTER"/>
+        <!-- 配置CAS的退出过滤器 -->
+        <security:custom-filter ref="singleSignOutFilter" before="CAS_FILTER"/>
+    </security:http>
+
+
+
+    <!-- 配置CAS作为认证的入口 -->
+    <bean id="casAuthenticationEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
+        <!-- 配置CAS服务端登录的URL -->
+        <property name="loginUrl" value="http://sso.pinyougou.com/login"/>
+        <!-- 配置服务属性 -->
+        <property name="serviceProperties" ref="serviceProperties"/>
+    </bean>
+
+    <!-- 配置服务属性 -->
+    <bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
+        <!-- 登录成功后重定向回的参数
+            /login/cas ：通过该后缀名进入SpringSecurity的身份认证的过滤器，获取该用户的角色权限
+         -->
+        <property name="service" value="http://user.pinyougou.com/login/cas"/>
+    </bean>
+
+    <!-- 配置SpringSecurtiy与CAS整合的身份认证过滤器 -->
+    <bean id="casAuthenticationFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter">
+        <!-- 配置认证管理器 -->
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <!-- 配置过滤处理的请求URL -->
+        <property name="filterProcessesUrl" value="/login/cas"/>
+    </bean>
+
+
+    <!-- 配置SpringSecurity的退出过滤器(退出首先进入该过滤器) -->
+    <bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+        <!-- SpringSecurity退出 -->
+        <constructor-arg>
+            <bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
+        </constructor-arg>
+        <!-- 退出成功的URL(CAS服务端退出URL) -->
+        <constructor-arg name="logoutSuccessUrl" value="http://sso.pinyougou.com/logout?service=http://www.pinyougou.com"/>
+        <!-- 配置退出过滤器处理的请求URL: http://localhost:9003/logout -->
+        <property name="filterProcessesUrl" value="/logout"/>
+    </bean>
+
+    <!-- 配置CAS单点退出的过滤器 -->
+    <bean id="singleSignOutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"/>
+
+
+
+    <!--################# 配置认证管理器 ################-->
+    <security:authentication-manager id="authenticationManager">
+        <!-- 配置CAS作为认证的提供者 -->
+        <security:authentication-provider ref="casAuthenticationProvider">
+
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <!-- 配置CAS作为认证的提供者(获取登录用名，再根据用户名获取角色权限) -->
+    <bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider">
+        <!-- 配置用户认证服务(获取角色权限) -->
+        <property name="authenticationUserDetailsService">
+            <!-- 配置用户名包裹服务 -->
+            <bean class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
+                <!-- 设置自定义的服务服务类 -->
+                <constructor-arg name="userDetailsService" ref="userDetailsService"/>
+            </bean>
+        </property>
+        <!-- 配置服务属性 -->
+        <property name="serviceProperties" ref="serviceProperties"/>
+        <!-- 配置票据验证ST -->
+        <property name="ticketValidator">
+            <!-- 票据验证 -->
+            <bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
+                <!-- 配置CAS服务端请求URL前缀 -->
+                <constructor-arg name="casServerUrlPrefix" value="http://sso.pinyougou.com"/>
+            </bean>
+        </property>
+        <!-- 配置CAS客户端的唯一的key (可以随意写) -->
+        <property name="key" value="auth_provider_key"/>
+    </bean>
+
+    <!-- 配置自定义的用户服务类 -->
+    <bean id="userDetailsService" class="com.pinyougou.user.service.UserDetailsServiceImpl"/>
+
+
+</beans>
