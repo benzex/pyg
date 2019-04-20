@@ -14,6 +14,7 @@
     <security:http pattern="/js/**" security="none"/>
     <security:http pattern="/plugins/**" security="none"/>
     <security:http pattern="/login.html" security="none"/>
+    <security:http pattern="/itemCat/findItemCatByParentId" security="none"/>
 
     <!-- 配置剩余的请求URL，都需要拦截 -->
     <security:http>

@@ -31,4 +31,7 @@ public interface AddressService {
 	/** 多条件分页查询 */
 	List<Address> findByPage(Address address, int page, int rows);
 
+	/** 根据登录用户名获取收件地址列表 */
+    List<Address> findAddressByUser(String userId);
+
 }

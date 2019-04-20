@@ -36,4 +36,82 @@
 	</filter-mapping>
 
 
+	<!--############## CAS单点登录配置  开始 ################-->
+	<!-- 配置单点退出过滤器 (可选配置) -->
+	<filter>
+		<filter-name>ssoutFilter</filter-name>
+		<filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+		<!-- 配置CAS服务URL前缀 -->
+		<init-param>
+			<param-name>casServerUrlPrefix</param-name>
+			<param-value>http://sso.pinyougou.com</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>ssoutFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 配置身份认证过滤器(不需要重定向到CAS登录系统，只要用来获取ST，再获取用户名) -->
+	<filter>
+		<filter-name>anonAuthenticationFilter</filter-name>
+		<filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+		<init-param>
+			<!-- 配置CAS服务端登录地址 -->
+			<param-name>casServerLoginUrl</param-name>
+			<param-value>http://sso.pinyougou.com</param-value>
+		</init-param>
+		<init-param>
+			<!-- 配置服务名称-->
+			<param-name>serverName</param-name>
+			<param-value>http://www.pinyougou.com</param-value>
+		</init-param>
+
+		<init-param>
+			<!-- 配置网关(异步从CAS服务端获取ST服务票据)-->
+			<param-name>gateway</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>anonAuthenticationFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+
+
+	<!-- 该过滤器负责对ticket的校验工作(必须启用) -->
+	<filter>
+		<filter-name>ticketValidationFilter</filter-name>
+		<filter-class>org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter</filter-class>
+		<!-- 配置CAS服务URL前缀 -->
+		<init-param>
+			<param-name>casServerUrlPrefix</param-name>
+			<param-value>http://sso.pinyougou.com</param-value>
+		</init-param>
+		<!-- 配置服务名称 -->
+		<init-param>
+			<param-name>serverName</param-name>
+			<param-value>http://www.pinyougou.com</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>ticketValidationFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!--
+      配置HttpServletRequest请求包裹过滤器 (可选配置)
+      说明：通过HttpServletRequest的getRemoteUser()方法获得SSO登录用户名
+    -->
+	<filter>
+		<filter-name>httpServletRequestWrapperFilter</filter-name>
+		<filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>httpServletRequestWrapperFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!--############## CAS单点登录配置  结束 ################-->
+
+
 </web-app>

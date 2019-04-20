@@ -1,5 +1,10 @@
 /** 定义首页控制器层 */
-app.controller("indexController", function($scope, baseService){
+app.controller("indexController", function($scope, $controller, baseService){
+
+
+    // 继承baseController
+    $controller('baseController', {$scope : $scope});
+
 
     // 查询首页广告数据
     $scope.findContentByCategoryId = function (categoryId) {
