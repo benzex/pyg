@@ -3,19 +3,37 @@
 	<head>
 		<meta charset="UTF-8"/>
 		<title>支付页-成功</title>
+		<base href="/"/>
 		<link rel="icon" href="/assets/img/favicon.ico"/>
     	<link rel="stylesheet" type="text/css" href="/css/webbase.css"/>
 		<link rel="stylesheet" type="text/css" href="/css/pages-paysuccess.css"/>
+
+		<script src="/plugins/angularjs/angular.min.js"></script>
+		<script src="/js/base.js"></script>
+		<script src="/js/service/baseService.js"></script>
+		<script src="/js/controller/baseController.js"></script>
+		<script src="/js/controller/cartController.js"></script>
+		<script src="/js/controller/orderController.js"></script>
+
+		<script type="text/javascript">
+			app.config(function($locationProvider){
+                $locationProvider.html5Mode(true);
+			});
+		</script>
 	</head>
-	<body>
+	<body ng-app="pinyougou"
+		  ng-controller="orderController"
+          ng-init="loadUsername();">
 		<!--head-->
 		<div class="top">
 			<div class="py-container">
 				<div class="shortcut">
-					<ul class="fl">
-						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请登录　<span><a href="#">免费注册</a></span></li>
-					</ul>
+                    <ul class="fl">
+                        <li class="f-item">
+                            {{loginName}}, 品优购欢迎您！&nbsp;
+                            <a href="http://sso.pinyougou.com/logout?service={{redirectUrl}}">退出</a>
+                        </li>
+                    </ul>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>
 						<li class="f-item space"></li>
@@ -45,7 +63,7 @@
 					<h3><img src="img/_/right.png" width="48" height="48">　恭喜您，支付成功啦！</h3>
 					<div class="paydetail">
 					<p>支付方式：微信支付</p>
-					<p>支付金额：￥1006.00元</p>
+					<p>支付金额：￥{{getMoney()}}元</p>
 					<p class="button">
 						<a href="myOrder.html" class="sui-btn btn-xlarge btn-danger">查看订单</a>
 						&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.pinyougou.com" class="sui-btn btn-xlarge ">继续购物</a></p>

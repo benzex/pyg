@@ -6,16 +6,24 @@
 		<link rel="icon" href="/assets/img/favicon.ico"/>
     	<link rel="stylesheet" type="text/css" href="/css/webbase.css"/>
 		<link rel="stylesheet" type="text/css" href="/css/pages-payfail.css"/>
+
+		<script src="/plugins/angularjs/angular.min.js"></script>
+		<script src="/js/base.js"></script>
+		<script src="/js/service/baseService.js"></script>
+		<script src="/js/controller/baseController.js"></script>
+
 	</head>
 
-	<body>
+	<body ng-app="pinyougou" ng-controller="baseController" ng-init="loadUsername()">
 		<!--head-->
 		<div class="top">
 			<div class="py-container">
 				<div class="shortcut">
 					<ul class="fl">
-						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请登录　<span><a href="#">免费注册</a></span></li>
+						<li class="f-item">
+							{{loginName}}, 品优购欢迎您！&nbsp;
+							<a href="http://sso.pinyougou.com/logout?service={{redirectUrl}}">退出</a>
+						</li>
 					</ul>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>

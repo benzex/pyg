@@ -6,15 +6,29 @@
         <link rel="icon" href="/assets/img/favicon.ico"/>
     	<link rel="stylesheet" type="text/css" href="/css/webbase.css"/>
 		<link rel="stylesheet" type="text/css" href="/css/pages-weixinpay.css"/>
+
+
+		<script src="/plugins/angularjs/angular.min.js"></script>
+		<script src="/js/base.js"></script>
+		<script src="/js/service/baseService.js"></script>
+		<script src="/js/controller/baseController.js"></script>
+		<script src="/js/controller/cartController.js"></script>
+		<script src="/js/controller/orderController.js"></script>
+		<script src="/js/qrious.min.js"></script>
+
 	</head>
-	<body>
+	<body ng-app="pinyougou"
+		  ng-controller="orderController"
+		  ng-init="loadUsername();genPayCode();">
 		<!--head-->
 		<div class="top">
 			<div class="py-container">
 				<div class="shortcut">
 					<ul class="fl">
-						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请登录　<span><a href="#">免费注册</a></span></li>
+						<li class="f-item">
+							{{loginName}}, 品优购欢迎您！&nbsp;
+							<a href="http://sso.pinyougou.com/logout?service={{redirectUrl}}">退出</a>
+						</li>
 					</ul>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>
@@ -43,16 +57,20 @@
 			<!--主内容-->
 			<div class="checkout py-container  pay">
 				<div class="checkout-tit">
-					<h4 class="fl tit-txt"><span class="success-icon"></span><span  class="success-info">订单提交成功，请您及时付款！订单号：56789065645</span></h4>
-                    <span class="fr"><em class="sui-lead">应付金额：</em><em  class="orange money">￥17,654</em>元</span>
+					<h4 class="fl tit-txt"><span class="success-icon"></span>
+						<span  class="success-info">订单提交成功，请您及时付款！订单号：{{outTradeNo}}</span>
+					</h4>
+                    <span class="fr"><em class="sui-lead">应付金额：</em>
+						<em  class="orange money">￥{{money}}</em>元</span>
 					<div class="clearfix"></div>
 				</div>				
 				<div class="checkout-steps">
 					<div class="fl weixin">微信支付</div>
                     <div class="fl sao"> 
-                        <p class="red">二维码已过期，刷新页面重新获取二维码。</p>                      
+                        <p class="red">{{tip}}</p>
                         <div class="fl code">
-                            <img src="img/erweima.png" alt="">
+							<!-- 二维码生成容器 -->
+                            <img id="qrcode"/>
                             <div class="saosao">
                                 <p>请使用微信扫一扫</p>
                                 <p>扫描二维码支付</p>
