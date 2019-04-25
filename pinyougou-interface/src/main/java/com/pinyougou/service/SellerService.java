@@ -34,4 +34,6 @@ public interface SellerService {
 
 	/** 商家审核 */
     void updateStatus(String sellerId, String status);
+
+	void deleteByIds(Serializable[] ids);
 }

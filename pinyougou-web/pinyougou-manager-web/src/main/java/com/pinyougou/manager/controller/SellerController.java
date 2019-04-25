@@ -54,5 +54,18 @@ public class SellerController {
         return false;
     }
 
+    /*商家删除*/
+    @GetMapping("/delete")
+    public boolean delete(String[] ids){
+        try {
+            sellerService.deleteByIds(ids);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
 
 }
