@@ -5,6 +5,8 @@ import com.pinyougou.pojo.User;
 import com.pinyougou.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 /**
  * 用户控制器
  *
@@ -46,5 +48,14 @@ public class UserController {
         }
         return false;
     }
-
+	
+	 /*获取所有的省 城市 地区*/
+    @GetMapping("/getAddress")
+    public Map<String,List> getAddress(){
+        try {
+            return userService.getAddress();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

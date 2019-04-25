@@ -3,6 +3,8 @@ package com.pinyougou.service;
 import com.pinyougou.pojo.User;
 import java.util.List;
 import java.io.Serializable;
+import java.util.Map;
+
 /**
  * UserService 服务接口
  * @date 2019-03-28 09:58:00
@@ -36,4 +38,7 @@ public interface UserService {
 
 	/** 检验验证码是否正确 */
 	boolean checkSmsCode(String phone, String code);
+
+	/*获取所有的省 城市 地区*/
+	Map<String,List> getAddress();
 }

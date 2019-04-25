@@ -3,7 +3,13 @@ package com.pinyougou.user.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.pinyougou.common.util.HttpClientUtils;
+import com.pinyougou.mapper.AreasMapper;
+import com.pinyougou.mapper.CitiesMapper;
+import com.pinyougou.mapper.ProvincesMapper;
 import com.pinyougou.mapper.UserMapper;
+import com.pinyougou.pojo.Areas;
+import com.pinyougou.pojo.Cities;
+import com.pinyougou.pojo.Provinces;
 import com.pinyougou.pojo.User;
 import com.pinyougou.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -29,6 +35,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ProvincesMapper provincesMapper;
+    @Autowired
+    private CitiesMapper citiesMapper;
+    @Autowired
+    private AreasMapper areasMapper;
     @Value("${sms.url}")
     private String smsUrl;
     @Value("${sms.signName}")
@@ -128,6 +140,20 @@ public class UserServiceImpl implements UserService {
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
+    }
+
+    /*获取所有的省 城市 地区*/
+    @Override
+    public Map<String, List> getAddress() {
+        Map<String,List> map = new HashMap<>();
+        List<Provinces> provinces = provincesMapper.selectAll();
+        List<Cities> cities = citiesMapper.selectAll();
+        List<Areas> areas = areasMapper.selectAll();
+
+        map.put("provinces",provinces);
+        map.put("cities",cities);
+        map.put("areas",areas);
+        return map;
     }
 
 }
