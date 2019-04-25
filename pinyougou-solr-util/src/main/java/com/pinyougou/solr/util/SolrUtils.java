@@ -87,6 +87,8 @@ public class SolrUtils {
         solrUtils.importDataToSolr();
     }
 
-    public void testGit(){}
+    public void testGit(){
+		System.out.println("test");
+	}
 
 }
