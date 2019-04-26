@@ -50,7 +50,4 @@ public interface OrderService {
 
 	Order findOrderbyOrderId(String orderId);
 
-	PageResult findOrderByUserIdPage(String userId, int page , int rows);
-
-	Order findOrderbyOrderId(String orderId);
 }
