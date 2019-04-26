@@ -3,7 +3,13 @@ package com.pinyougou.user.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.pinyougou.common.util.HttpClientUtils;
+import com.pinyougou.mapper.AreasMapper;
+import com.pinyougou.mapper.CitiesMapper;
+import com.pinyougou.mapper.ProvincesMapper;
 import com.pinyougou.mapper.UserMapper;
+import com.pinyougou.pojo.Areas;
+import com.pinyougou.pojo.Cities;
+import com.pinyougou.pojo.Provinces;
 import com.pinyougou.pojo.User;
 import com.pinyougou.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -13,6 +19,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +38,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ProvincesMapper provincesMapper;
+    @Autowired
+    private CitiesMapper citiesMapper;
+    @Autowired
+    private AreasMapper areasMapper;
     @Value("${sms.url}")
     private String smsUrl;
     @Value("${sms.signName}")
@@ -54,9 +69,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /*修改用户信息设置*/
     @Override
     public void update(User user) {
-
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     @Override
@@ -130,4 +146,41 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /*获取所有的省*/
+    @Override
+    public List<Provinces> findProvinces() {
+        List<Provinces> provinces = provincesMapper.selectAll();
+        return provinces;
+    }
+
+    /*根据省份获取城市集合*/
+    @Override
+    public List<Cities> findCities(String provinceId) {
+        Cities cities = new Cities();
+        cities.setProvinceId(provinceId);
+        return citiesMapper.select(cities);
+    }
+
+    @Override
+    public List<Areas> findAreas(String cityId) {
+        Areas areas = new Areas();
+        areas.setCityId(cityId);
+        return areasMapper.select(areas);
+    }
+
+    /*查询用户信息*/
+    @Override
+    public Map<String,Object> findOneByLoginName(String loginName) {
+        try {
+            Map<String,Object> map = new HashMap<>();
+            User user = new User();
+            user.setUsername(loginName);
+            User user1 = userMapper.selectOne(user);
+            map.put("user",user1);
+            map.put("birthday",new SimpleDateFormat("yyyy-MM-dd").format(user1.getBirthday()));
+            return map;
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
 }
