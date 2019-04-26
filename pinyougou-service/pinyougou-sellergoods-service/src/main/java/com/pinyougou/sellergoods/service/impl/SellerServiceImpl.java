@@ -43,7 +43,13 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public void update(Seller seller) {
+    public void update(String sellerId,Seller seller) {
+        try{
+            seller.setSellerId(sellerId);
+            sellerMapper.updateByPrimaryKeySelective(seller);
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
 
     }
 
@@ -56,6 +62,7 @@ public class SellerServiceImpl implements SellerService {
     public void deleteAll(Serializable[] ids) {
 
     }
+
 
     @Override
     public Seller findOne(Serializable id) {
@@ -90,6 +97,15 @@ public class SellerServiceImpl implements SellerService {
             sellerMapper.updateStatus(sellerId, status);
         }catch (Exception ex){
             throw new RuntimeException(ex);
+        }
+    }
+
+    public void deleteByIds(Serializable[] ids){
+
+        try {
+            sellerMapper.deleteByIds(ids);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -25,6 +25,7 @@ public class LoginController {
         // 获取安全上下文对象
         SecurityContext context = SecurityContextHolder.getContext();
         String loginName = context.getAuthentication().getName();
+        System.out.println(loginName);
 
         Map<String,String> data = new HashMap<>();
         data.put("loginName", loginName);

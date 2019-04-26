@@ -1,11 +1,17 @@
 package com.pinyougou.service;
 
+<<<<<<< HEAD
 import com.pinyougou.cart.Cart;
+=======
+import com.pinyougou.common.pojo.PageResult;
+>>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
 import com.pinyougou.pojo.Order;
 import com.pinyougou.pojo.PayLog;
 
 import java.util.List;
 import java.io.Serializable;
+import java.util.Map;
+
 /**
  * OrderService 服务接口
  * @date 2019-03-28 09:58:00
@@ -40,7 +46,13 @@ public interface OrderService {
     /** 支付成功，修改支付日志的状态、订单的状态 */
     void updatePayStatus(String outTradeNo, String transactionId);
 
+<<<<<<< HEAD
     List<Cart> findCartOrderRedis(String user);
 
     void addOrderCartRedis(List<Cart> orderCarts, String user);
+=======
+	PageResult findOrderByUserIdPage(String userId, int page , int rows);
+
+	Order findOrderbyOrderId(String orderId);
+>>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
 }

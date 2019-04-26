@@ -1,8 +1,13 @@
 package com.pinyougou.service;
 
+import com.pinyougou.pojo.Areas;
+import com.pinyougou.pojo.Cities;
+import com.pinyougou.pojo.Provinces;
 import com.pinyougou.pojo.User;
 import java.util.List;
 import java.io.Serializable;
+import java.util.Map;
+
 /**
  * UserService 服务接口
  * @date 2019-03-28 09:58:00
@@ -37,5 +42,19 @@ public interface UserService {
 	/** 检验验证码是否正确 */
 	boolean checkSmsCode(String phone, String code);
 
+<<<<<<< HEAD
     User loadsateUI(String remoteUser);
+=======
+	/*获取所有的省*/
+	List<Provinces> findProvinces();
+
+	/*根据省份获取城市集合*/
+	List<Cities> findCities(String provinceId);
+
+	/*根据城市获取地区集合*/
+	List<Areas> findAreas(String cityId);
+
+	/*查询用户信息*/
+	Map<String,Object> findOneByLoginName(String loginName);
+>>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
 }

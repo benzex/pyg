@@ -39,16 +39,6 @@ app.controller('sellerController', function($scope, $controller, baseService){
     };
 
 
-
-
-
-
-
-
-
-
-
-
     /** 添加或修改 */
     $scope.saveOrUpdate = function(){
         var url = "save";
@@ -77,6 +67,7 @@ app.controller('sellerController', function($scope, $controller, baseService){
                     if (response.data){
                         /** 重新加载数据 */
                         $scope.reload();
+                        $scope.ids = [];
                     }else{
                         alert("删除失败！");
                     }
@@ -85,4 +76,36 @@ app.controller('sellerController', function($scope, $controller, baseService){
             alert("请选择要删除的记录！");
         }
     };
+
+
+    //反选
+    $scope.selectInverse = function () {
+        $scope.idsTemp = [];
+        var flag = 0;
+        var idsStrArr = JSON.parse(JSON.stringify($scope.ids));
+
+        angular.forEach($scope.dataList,function (data) {
+                angular.forEach(idsStrArr, function (value, index){
+                    if(value == data.sellerId){/*原来选中的*/
+                         flag = 1;
+                    }
+                });
+                if(flag != 1){//原来没选中
+                    flag = 0;
+                    $scope.idsTemp.push(data.sellerId);
+                }
+        });
+
+        /*for(var i = 0; i<$scope.dataList.length ; i++){
+
+            var entity = $scope.dataList[j];
+            for (var j = 0; j<$scope.ids.length ; j++){
+
+                if($scope.ids[j] != $scope.dataList[i].sellerId){//原来没选中的
+                    $scope.idsTemp.push($scope.dataList[i].sellerId);
+                }
+            }
+        }*/
+        $scope.ids = $scope.idsTemp;
+    }
 });
