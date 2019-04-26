@@ -1,20 +1,12 @@
 package com.pinyougou.service;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 import com.pinyougou.cart.Cart;
-=======
 import com.pinyougou.common.pojo.PageResult;
->>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
-=======
-import com.pinyougou.common.pojo.PageResult;
->>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
 import com.pinyougou.pojo.Order;
 import com.pinyougou.pojo.PayLog;
 
-import java.util.List;
 import java.io.Serializable;
-import java.util.Map;
+import java.util.List;
 
 /**
  * OrderService 服务接口
@@ -50,19 +42,15 @@ public interface OrderService {
     /** 支付成功，修改支付日志的状态、订单的状态 */
     void updatePayStatus(String outTradeNo, String transactionId);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     List<Cart> findCartOrderRedis(String user);
 
     void addOrderCartRedis(List<Cart> orderCarts, String user);
-=======
+
 	PageResult findOrderByUserIdPage(String userId, int page , int rows);
 
 	Order findOrderbyOrderId(String orderId);
->>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
-=======
+
 	PageResult findOrderByUserIdPage(String userId, int page , int rows);
 
 	Order findOrderbyOrderId(String orderId);
->>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
 }
