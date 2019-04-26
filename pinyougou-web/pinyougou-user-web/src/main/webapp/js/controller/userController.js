@@ -129,7 +129,7 @@ app.controller('userController', function($scope, $timeout, baseService){
                 }
                 /*转换为JOSN格式*/
                 $scope.user.address = JSON.parse(response.data.user.address);
-
+                cc
                 $scope.user.birthday = response.data.birthday;
             }else {
                 alert("获取用户信息失败!")
