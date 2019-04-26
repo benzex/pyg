@@ -218,12 +218,12 @@ $(function(){
                                 <tbody>
                                     <tr ng-repeat="address in addressList">
                                         <td>{{address.contact}}</td>
-                                        <td>{{address.provinceId}} {{address.cityId}} {{address.townId}} {{address.address}}</td>
+                                        <td>{{address.address}}</td>
                                         <td>{{address.mobile}}</td>
                                         <td>
                                             <a data-toggle="modal" data-target=".edit" data-keyboard="false" ng-click="show(address);">编辑</a>
-                                            <a href="#">删除</a>
-                                            默认地址
+                                            <a href="#" ng-click="delete(address.id)">删除</a>
+											<button type="button" ng-click="changeDefault(address.id);" ng-disabled="{{address.isDefault=='1'}}">默认地址</button>
                                         </td>
                                     </tr>
                                 </tbody>

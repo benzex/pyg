@@ -44,12 +44,12 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public void update(Address address) {
-
+        addressMapper.updateByPrimaryKeySelective(address);
     }
 
     @Override
     public void delete(Serializable id) {
-
+        addressMapper.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -113,4 +113,19 @@ public class AddressServiceImpl implements AddressService {
         return areasMapper.select(areas);
     }
 
+    /*设置默认地址*/
+    @Override
+    public void changeDefault(Long id) {
+        /*撤销原先的默认地址*/
+        Address address = new Address();
+        address.setIsDefault("1");
+        List<Address> addressList = addressMapper.select(address);
+        if (addressList.size() > 0 && addressList != null){
+            addressList.get(0).setIsDefault("0");
+            addressMapper.updateByPrimaryKeySelective(addressList.get(0));
+        }
+        Address address1 = addressMapper.selectByPrimaryKey(id);
+        address1.setIsDefault("1");
+        addressMapper.updateByPrimaryKeySelective(address1);
+    }
 }

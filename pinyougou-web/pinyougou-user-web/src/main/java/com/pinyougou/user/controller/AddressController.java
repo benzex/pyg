@@ -73,4 +73,40 @@ public class AddressController {
         }
         return false;
     }
+
+    /*修改收件地址*/
+    @PostMapping("/update")
+    public boolean update(@RequestBody Address address){
+        try {
+            addressService.update(address);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /*删除地址*/
+    @GetMapping("/delete")
+    public boolean deleteAddress(Long id){
+        try {
+            addressService.delete(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /*设置默认地址*/
+    @GetMapping("/changeDefault")
+    public boolean changeDefault(Long id){
+        try {
+            addressService.changeDefault(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

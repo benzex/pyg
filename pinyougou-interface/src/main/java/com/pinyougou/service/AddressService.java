@@ -46,4 +46,7 @@ public interface AddressService {
 
 	/*根据城市获取地区集合*/
 	List<Areas> findAreas(String cityId);
+
+	/*设置默认地址*/
+	void changeDefault(Long id);
 }

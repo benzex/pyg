@@ -83,4 +83,29 @@ app.controller('addressController', function ($scope, baseService) {
         $scope.address = JSON.parse(jsonStr);
     };
 
+    /*删除地址*/
+    $scope.delete = function (id) {
+        if (confirm("确认删除吗?")){
+            baseService.sendGet("/address/delete","id="+id).then(function (response) {
+                if (response){
+                    $scope.getUserAndAddress();
+                }else {
+                    alert("操作失败!")
+                }
+            })
+        }
+    };
+
+    /*设定默认地址*/
+    $scope.changeDefault = function (id) {
+        if (confirm("确认要设为默认吗?")){
+            baseService.sendGet("/address/changeDefault","id="+id).then(function (response) {
+                if (response){
+                    $scope.getUserAndAddress();
+                }else {
+                    alert("操作失败!")
+                }
+            })
+        }
+    }
 });
