@@ -2,7 +2,13 @@ package com.pinyougou.user.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.mapper.AddressMapper;
+import com.pinyougou.mapper.AreasMapper;
+import com.pinyougou.mapper.CitiesMapper;
+import com.pinyougou.mapper.ProvincesMapper;
 import com.pinyougou.pojo.Address;
+import com.pinyougou.pojo.Areas;
+import com.pinyougou.pojo.Cities;
+import com.pinyougou.pojo.Provinces;
 import com.pinyougou.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +30,16 @@ public class AddressServiceImpl implements AddressService {
 
     @Autowired
     private AddressMapper addressMapper;
+    @Autowired
+    private ProvincesMapper provincesMapper;
+    @Autowired
+    private CitiesMapper citiesMapper;
+    @Autowired
+    private AreasMapper areasMapper;
 
     @Override
     public void save(Address address) {
-
+        addressMapper.insert(address);
     }
 
     @Override
@@ -78,4 +90,27 @@ public class AddressServiceImpl implements AddressService {
             throw new RuntimeException(ex);
         }
     }
+
+    /*获取所有的省*/
+    @Override
+    public List<Provinces> findProvinces() {
+        List<Provinces> provinces = provincesMapper.selectAll();
+        return provinces;
+    }
+
+    /*根据省份获取城市集合*/
+    @Override
+    public List<Cities> findCities(String provinceId) {
+        Cities cities = new Cities();
+        cities.setProvinceId(provinceId);
+        return citiesMapper.select(cities);
+    }
+
+    @Override
+    public List<Areas> findAreas(String cityId) {
+        Areas areas = new Areas();
+        areas.setCityId(cityId);
+        return areasMapper.select(areas);
+    }
+
 }
