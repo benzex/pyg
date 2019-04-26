@@ -52,18 +52,17 @@ public class SellerController {
     @PostMapping("/update")
     public boolean update(@RequestBody Seller seller) {
         try {
-            String newPassword = seller.getPassword();
-            System.out.println("新密码"+newPassword);
+            if(seller.getPassword()!=null){
+                String newPassword = seller.getPassword();
+                System.out.println("新密码"+newPassword);
+                String password = passwordEncoder.encode(newPassword);
+                seller.setPassword(password);
+            }
             // 获取安全上下文对象
             SecurityContext context = SecurityContextHolder.getContext();
             // 获取用户名
             String sellerId = context.getAuthentication().getName();
             System.out.println(sellerId);
-
-            String password = passwordEncoder.encode(newPassword);
-            if(password !=null){
-                seller.setPassword(password);
-            }
             sellerService.update(sellerId, seller);
             return true;
         } catch (Exception ex) {
