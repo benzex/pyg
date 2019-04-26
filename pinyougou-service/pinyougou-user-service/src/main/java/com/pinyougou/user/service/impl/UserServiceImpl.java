@@ -19,6 +19,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -66,9 +69,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /*修改用户信息设置*/
     @Override
     public void update(User user) {
-
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     @Override
@@ -156,4 +160,19 @@ public class UserServiceImpl implements UserService {
         return map;
     }
 
+    /*查询用户信息*/
+    @Override
+    public Map<String,Object> findOneByLoginName(String loginName) {
+        try {
+            Map<String,Object> map = new HashMap<>();
+            User user = new User();
+            user.setUsername(loginName);
+            User user1 = userMapper.selectOne(user);
+            map.put("user",user1);
+            map.put("birthday",new SimpleDateFormat("yyyy-MM-dd").format(user1.getBirthday()));
+            return map;
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
 }

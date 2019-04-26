@@ -3,6 +3,8 @@ package com.pinyougou.user.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.User;
 import com.pinyougou.service.UserService;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,5 +59,33 @@ public class UserController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /*查询用户信息*/
+    @GetMapping("/getUser")
+    public Map<String,Object> getUser(){
+        try {
+            /*获取安全上下文对象*/
+            SecurityContext context = SecurityContextHolder.getContext();
+            /*获取用户名*/
+            String loginName = context.getAuthentication().getName();
+            Map<String, Object> map = userService.findOneByLoginName(loginName);
+            return map;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /*修改用户信息设置*/
+    @PostMapping("/updateUser")
+    public boolean updateUser(@RequestBody User user){
+        try {
+            System.out.println(user.getAddress());
+            userService.update(user);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

@@ -3,6 +3,8 @@ app.controller('userController', function($scope, $timeout, baseService){
 
     // 定义user对象
     $scope.user = {address:{}};
+    $scope.cities = [];
+    $scope.areas = [];
     /** 用户注册 */
     $scope.save = function () {
 
@@ -90,17 +92,11 @@ app.controller('userController', function($scope, $timeout, baseService){
 
     /*根据省份查询城市*/
     $scope.$watch("user.address.province",function (newValue,oldValue) {
+        /*初始化城市集合*/
+        $scope.citiesList = [];
         if (newValue){
-            var provinces = $scope.provinces;
-            for (var i = 0;i < provinces.length;i++){
-                if(newValue == provinces[i].province){
-                    var provinceId = provinces[i].provinceId;
-                    break;
-                }
-            }
-            $scope.citiesList = [];
             for (var i = 0;i <$scope.cities.length;i++){
-                if($scope.cities[i].provinceId == provinceId){
+                if($scope.cities[i].provinceId == newValue){
                     $scope.citiesList.push($scope.cities[i]);
                 }
             }
@@ -109,21 +105,61 @@ app.controller('userController', function($scope, $timeout, baseService){
 
     /*根据城市查询区域*/
     $scope.$watch("user.address.city",function (newValue,oldValue) {
+        /*初始化地域集合*/
+        $scope.areasList = [];
         if (newValue){
-            var cities = $scope.cities;
-            for (var i = 0;i < cities.length;i++){
-                if(newValue == cities[i].city){
-                    var cityId = cities[i].cityId;
-                    break;
-                }
-            }
-            $scope.areasList = [];
             for (var i = 0;i <$scope.areas.length;i++){
-                if($scope.areas[i].cityId == cityId){
+                if($scope.areas[i].cityId == newValue){
                     $scope.areasList.push($scope.areas[i]);
                 }
             }
         }
     });
 
+    /*查询用户信息*/
+    $scope.getUser = function () {
+        baseService.sendGet("/user/getUser").then(function (response) {
+            if (response.data){
+
+                $scope.user = response.data.user;
+
+                /*用户如果没有设置头像,则使用默认头像*/
+                if ($scope.user.headPic == null){
+                    $scope.user.headPic = "img/_/photo.png";
+                }
+                /*转换为JOSN格式*/
+                $scope.user.address = JSON.parse(response.data.user.address);
+
+                $scope.user.birthday = response.data.birthday;
+            }else {
+                alert("获取用户信息失败!")
+            }
+        })
+    };
+
+    /*修改用户头像*/
+    $scope.updateHeadPic = function () {
+        /*调用服务层上传文件*/
+        baseService.uploadFile().then(function (response) {
+            /*获取响应数据 */
+            if (response.data.status == 200){
+                $scope.user.headPic = response.data.url;
+                $scope.updateUser();
+            }else {
+                alert("上传失败!")
+            }
+        });
+    };
+
+    /*修改用户信息设置*/
+    $scope.updateUser = function () {
+        baseService.sendPost("/user/updateUser",$scope.user).then(function (response) {
+            if(response.data){
+                alert("保存成功!");
+                $scope.getUser();
+            }else {
+                alert("保存失败!");
+            }
+        })
+    }
 });

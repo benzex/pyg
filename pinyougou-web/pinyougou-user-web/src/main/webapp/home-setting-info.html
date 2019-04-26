@@ -19,7 +19,7 @@
 
 </head>
 
-<body ng-app="pinyougou" ng-controller="userController" ng-init="getProvinces();">
+<body ng-app="pinyougou" ng-controller="userController" ng-init="getProvinces();getUser();">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -29,8 +29,8 @@
 			<div class="py-container">
 				<div class="shortcut">
 					<ul class="fl">
-						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
+						<li ng-if="user.username" class="f-item"><a href="http://user.pinyougou.com/home-index.html" target="_blank">{{user.username}}</a> 品优购欢迎您!</li>
+						<li ng-if="!user.username"class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
 					</ul>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>
@@ -184,9 +184,9 @@ $(function(){
                 <div class="yui3-u-1-6 list">
 
                     <div class="person-info">
-                        <div class="person-photo"><img src="img/_/photo.png" alt=""></div>
+                        <div class="person-photo"><img src="{{user.headPic}}" width="50px" height="50px" alt=""></div>
                         <div class="person-account">
-                            <span class="name">Michelle</span>
+                            <span class="name">{{user.username}}</span>
                             <span class="safe">账户安全</span>
                         </div>
                         <div class="clearfix"></div>
@@ -236,8 +236,8 @@ $(function(){
                                     <div class="control-group">
                                         <label for="inputGender" class="control-label">性别：</label>
                                         <div class="controls">
-                                            <input ng-model="user.sex" type="radio" name="gender" value="1"><span>男</span>
-                                            <input ng-model="user.sex" type="radio" name="gender" value="2"><span>女</span>
+                                            <input ng-model="user.sex" type="radio" checked="{{user.sex == 1?'checked':''}}" name="gender" value="1"><span>男</span>
+                                            <input ng-model="user.sex" type="radio" checked="{{user.sex == 2?'checked':''}}" name="gender" value="2"><span>女</span>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -249,17 +249,17 @@ $(function(){
                                         <div class="controls">
                                             <div>
                                                 <div class="form-group area">
-                                                    <select ng-model="user.address.province" ng-options="p.province as p.province for p in provinces">
+                                                    <select ng-model="user.address.province" ng-options="p.provinceId as p.province for p in provinces">
 														<option value="">==请选择省份==</option>
 													</select>
                                                 </div>
                                                 <div class="form-group area">
-                                                    <select ng-model="user.address.city" class="form-control" id="city1" ng-options="c.city as c.city for c in citiesList">
+                                                    <select ng-model="user.address.city" class="form-control" id="city1" ng-options="c.cityId as c.city for c in citiesList">
 														<option value="">==请选择城市==</option>
 													</select>
                                                 </div>
                                                 <div class="form-group area">
-                                                    <select ng-model="user.address.area" class="form-control" id="district1" ng-options="a.area as a.area for a in areasList">
+                                                    <select ng-model="user.address.area" class="form-control" id="district1" ng-options="a.areaId as a.area for a in areasList">
 														<option value="">==请选择地区==</option>
 													</select>
                                                 </div>
@@ -282,18 +282,20 @@ $(function(){
                                     <div class="control-group">
                                         <label for="sanwei" class="control-label"></label>
                                         <div class="controls">
-                                            <button type="submit" class="sui-btn btn-primary">立即注册</button>
+                                            <button type="submit" class="sui-btn btn-primary" ng-click="updateUser()">保存</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div id="two" class="tab-pane">
-
+							{{user}}
                                 <div class="new-photo">
                                     <p>当前头像：</p>
                                     <div class="upload">
                                         <img id="imgShow_WU_FILE_0" width="100" height="100" src="img/_/photo_icon.png" alt="">
-                                        <input type="file" id="up_img_WU_FILE_0" />
+										<input type="file" id="up_img_WU_FILE_0" />
+										<button type="submit" class="sui-btn btn-primary"
+												ng-click="updateHeadPic()">保存</button>
                                     </div>
 
                                 </div>

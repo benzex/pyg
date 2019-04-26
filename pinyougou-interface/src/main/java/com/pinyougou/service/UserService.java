@@ -41,4 +41,7 @@ public interface UserService {
 
 	/*获取所有的省 城市 地区*/
 	Map<String,List> getAddress();
+
+	/*查询用户信息*/
+	Map<String,Object> findOneByLoginName(String loginName);
 }
