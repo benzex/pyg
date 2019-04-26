@@ -43,7 +43,13 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public void update(Seller seller) {
+    public void update(String sellerId,Seller seller) {
+        try{
+            seller.setSellerId(sellerId);
+            sellerMapper.updateByPrimaryKeySelective(seller);
+        }catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
 
     }
 
