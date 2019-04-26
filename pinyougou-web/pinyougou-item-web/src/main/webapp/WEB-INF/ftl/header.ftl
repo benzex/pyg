@@ -6,9 +6,14 @@
             <div class="py-container">
                 <div class="shortcut">
                     <ul class="fl">
-                        <li class="f-item">品优购欢迎您！</li>
-                        <li class="f-item">请<a href="login.html">登录</a><span>
-							<a href="http://user.pinyougou.com/register.html">免费注册</a></span></li>
+                        <li ng-if="loginName" class="f-item">
+                            {{loginName}}, 品优购欢迎您！&nbsp;
+                            <a href="http://sso.pinyougou.com/logout?service={{redirectUrl}}">退出</a>
+                        </li>
+                        <li ng-if="!loginName" class="f-item">
+                            请 <a href="http://sso.pinyougou.com/login?service={{redirectUrl}}">登录</a>　
+                            <a href="http://user.pinyougou.com/register.html">免费注册</a>
+                        </li>
                     </ul>
                     <ul class="fr">
                         <li class="f-item">我的订单</li>

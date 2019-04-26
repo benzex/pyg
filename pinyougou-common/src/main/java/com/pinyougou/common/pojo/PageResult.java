@@ -16,6 +16,7 @@ public class PageResult implements Serializable{
     private long total;
     // 分页数据
     private List<?> rows;
+
     public PageResult(){
 
     }
