@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 import tk.mybatis.mapper.common.Mapper;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -21,4 +22,7 @@ public interface SellerMapper extends Mapper<Seller>{
     @Update("UPDATE tb_seller SET STATUS = #{status} WHERE seller_id = #{sellerId}")
     void updateStatus(@Param("sellerId") String sellerId,
                       @Param("status")String status);
+
+
+    void deleteByIds(Serializable[] ids);
 }

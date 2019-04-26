@@ -5,6 +5,7 @@ import com.pinyougou.mapper.ItemMapper;
 import com.pinyougou.pojo.Item;
 import com.pinyougou.pojo.OrderItem;
 import com.pinyougou.service.CartService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;

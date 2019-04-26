@@ -15,7 +15,7 @@ public interface SellerService {
 	void save(Seller seller);
 
 	/** 修改方法 */
-	void update(Seller seller);
+	void update(String sellerId,Seller seller);
 
 	/** 根据主键id删除 */
 	void delete(Serializable id);
@@ -34,4 +34,6 @@ public interface SellerService {
 
 	/** 商家审核 */
     void updateStatus(String sellerId, String status);
+
+	void deleteByIds(Serializable[] ids);
 }

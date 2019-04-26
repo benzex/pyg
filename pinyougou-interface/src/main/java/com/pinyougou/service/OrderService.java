@@ -1,10 +1,13 @@
 package com.pinyougou.service;
 
+import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Order;
 import com.pinyougou.pojo.PayLog;
 
 import java.util.List;
 import java.io.Serializable;
+import java.util.Map;
+
 /**
  * OrderService 服务接口
  * @date 2019-03-28 09:58:00
@@ -38,4 +41,8 @@ public interface OrderService {
 
     /** 支付成功，修改支付日志的状态、订单的状态 */
     void updatePayStatus(String outTradeNo, String transactionId);
+
+	PageResult findOrderByUserIdPage(String userId, int page , int rows);
+
+	Order findOrderbyOrderId(String orderId);
 }

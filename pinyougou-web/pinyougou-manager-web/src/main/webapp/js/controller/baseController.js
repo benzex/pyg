@@ -22,6 +22,7 @@ app.controller('baseController', function ($scope) {
     // 定义数组封装品牌id
     $scope.ids = [];
 
+
     // 为checkbox绑定点击事件，记录用户选择的品牌
     $scope.updateSelection = function (event, id) {
         // 获取dom元素
