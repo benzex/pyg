@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>结算页</title>
+    <base href="/"/>
     <link rel="stylesheet" type="text/css" href="/css/webbase.css"/>
 	<link rel="stylesheet" type="text/css" href="/css/pages-getOrderInfo.css"/>
 	<script src="/plugins/angularjs/angular.min.js"></script>
@@ -11,11 +12,15 @@
 	<script src="/js/controller/baseController.js"></script>
 	<script src="/js/controller/cartController.js"></script>
 	<script src="/js/controller/orderController.js"></script>
-
+    <script type="text/javascript">
+        app.config(function ($locationProvider) {
+            $locationProvider.html5Mode(true);
+        })
+    </script>
 </head>
 <body ng-app="pinyougou"
 	  ng-controller="orderController"
-	  ng-init="findAddressByUser();loadUsername();findCart();">
+	  ng-init="findAddressByUser();loadUsername();findCartOrder();">
 	<!--head-->
 	<div class="top">
 		<div class="py-container">
@@ -84,7 +89,6 @@
 										</a>
 									</div>
 									<div class="con address">
-										{{item.address}}
 										<span>{{item.mobile}}</span>
 										<span ng-if="item.isDefault == 1" class="base">默认地址</span>
 										<span>
@@ -176,7 +180,6 @@
 								货到付款<span title="点击取消选择"></span></li>
 						</ul>
 					</div>
-					{{order}}
 					<div class="hr"></div>
 					<div class="step-tit">
 						<h5>送货清单</h5>

@@ -221,4 +221,18 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException(ex);
         }
     }
+
+    @Override
+    public List<Cart> findCartOrderRedis(String user) {
+        try {
+            return (List<Cart>) redisTemplate.boundValueOps("cartOrder_"+user).get();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public void addOrderCartRedis(List<Cart> orderCarts, String user) {
+        redisTemplate.boundValueOps("cartOrder_"+user).set(orderCarts);
+    }
 }

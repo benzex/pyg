@@ -36,4 +36,6 @@ public interface UserService {
 
 	/** 检验验证码是否正确 */
 	boolean checkSmsCode(String phone, String code);
+
+    User loadsateUI(String remoteUser);
 }

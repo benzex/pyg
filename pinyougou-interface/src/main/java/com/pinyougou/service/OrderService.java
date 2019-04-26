@@ -1,5 +1,6 @@
 package com.pinyougou.service;
 
+import com.pinyougou.cart.Cart;
 import com.pinyougou.pojo.Order;
 import com.pinyougou.pojo.PayLog;
 
@@ -38,4 +39,8 @@ public interface OrderService {
 
     /** 支付成功，修改支付日志的状态、订单的状态 */
     void updatePayStatus(String outTradeNo, String transactionId);
+
+    List<Cart> findCartOrderRedis(String user);
+
+    void addOrderCartRedis(List<Cart> orderCarts, String user);
 }

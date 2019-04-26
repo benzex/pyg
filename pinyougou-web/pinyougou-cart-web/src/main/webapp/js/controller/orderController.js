@@ -119,4 +119,59 @@ app.controller('orderController', function ($scope, $controller, $interval, $loc
     };
 
 
+    $scope.addAddress=function () {
+        baseService.sendPost("/address/add",address).then(
+            function (response) {
+                if (response.data){
+                    alert("添加成功");
+                    $scope.findAddressByUser();
+                }
+                else {
+                    alert('异常');
+                }
+            }
+        )
+    };
+
+
+    $scope.addOrder=function () {
+        $scope.order.receiverAreaName = $scope.address.address;
+        $scope.order.receiverMobile = $scope.address.mobile;
+        $scope.order.receiver = $scope.address.contact;
+        baseService.sendPost("/order/add",$scope.order).then(
+            function (response) {
+                if (response.data){
+                    if ($scope.order.paymentType == 1){
+                        location.href = "/order/pay.html";
+                    }else{
+                        location.href = "/order/paysuccess.html";
+                    }
+                }
+            }
+        )
+    };
+    //获取选中商品的url集
+    $scope.getItems=function(){
+        return $location.search().ids;
+    };
+    //得到购物车添加至订单商品
+    $scope.findCartOrder=function (){
+        var ids = $scope.getItems();
+        ids = JSON.parse(ids);
+        alert(ids);
+        baseService.sendGet("/order/findCartOrder?itemIds="+ids).then(
+            function (response) {
+                $scope.totalEntity = {totalNum :0, totalMoney :0.00};
+                $scope.carts = response.data;
+                for(var i = 0;i < $scope.carts.length; i++){
+                    var cart = $scope.carts[i];
+                    for (var j = 0; j < cart.orderItems.length; j++){
+                        var orderItems = cart.orderItems[j];
+                        $scope.totalEntity.totalNum += orderItems.num;
+                        $scope.totalEntity.totalMoney += orderItems.totalFee;
+                    }
+                }
+            })
+    };
+
 });

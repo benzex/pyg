@@ -5,7 +5,6 @@ app.controller('userController', function($scope, $timeout, baseService){
     $scope.user = {};
     /** 用户注册 */
     $scope.save = function () {
-
         // 判断两次密码是否一致
         if ($scope.okPassword && $scope.user.password == $scope.okPassword){
             // 发送异步请求
@@ -31,7 +30,6 @@ app.controller('userController', function($scope, $timeout, baseService){
 
     // 发送短信验证码
     $scope.sendSmsCode = function () {
-
         // 判断手机号码
         if ($scope.user.phone && /^1[3|4|5|7|8]\d{9}$/.test($scope.user.phone)){
             // 发送异步请求
