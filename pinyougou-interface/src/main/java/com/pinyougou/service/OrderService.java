@@ -1,7 +1,11 @@
 package com.pinyougou.service;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.pinyougou.cart.Cart;
+=======
+import com.pinyougou.common.pojo.PageResult;
+>>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
 =======
 import com.pinyougou.common.pojo.PageResult;
 >>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
@@ -47,9 +51,15 @@ public interface OrderService {
     void updatePayStatus(String outTradeNo, String transactionId);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     List<Cart> findCartOrderRedis(String user);
 
     void addOrderCartRedis(List<Cart> orderCarts, String user);
+=======
+	PageResult findOrderByUserIdPage(String userId, int page , int rows);
+
+	Order findOrderbyOrderId(String orderId);
+>>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
 =======
 	PageResult findOrderByUserIdPage(String userId, int page , int rows);
 

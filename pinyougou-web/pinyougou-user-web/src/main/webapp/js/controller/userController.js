@@ -233,5 +233,8 @@ app.controller('userController', function($scope, $timeout, baseService){
             }
         })
     }
+<<<<<<< HEAD
+>>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
+=======
 >>>>>>> f75dacd6a7dce102264a931ec541a2a9ee717f59
 });
