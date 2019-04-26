@@ -3,8 +3,6 @@ app.controller('userController', function($scope, $timeout, baseService){
 
     // 定义user对象
     $scope.user = {address:{}};
-    $scope.cities = [];
-    $scope.areas = [];
     /** 用户注册 */
     $scope.save = function () {
 
@@ -77,13 +75,11 @@ app.controller('userController', function($scope, $timeout, baseService){
     };
 	
 	
-	/*获取所有的省 城市 地区*/
-    $scope.getProvinces = function () {
-        baseService.sendGet("/user/getAddress").then(function (response) {
+	/*获取所有的省*/
+    $scope.getProvinces = function (){
+        baseService.sendGet("/user/findProvinces").then(function (response) {
             if (response.data){
-                $scope.provinces = response.data.provinces;
-                $scope.cities = response.data.cities;
-                $scope.areas = response.data.areas;
+                $scope.provinces = response.data;
             }else {
                 alert("操作失误")
             }
@@ -95,11 +91,11 @@ app.controller('userController', function($scope, $timeout, baseService){
         /*初始化城市集合*/
         $scope.citiesList = [];
         if (newValue){
-            for (var i = 0;i <$scope.cities.length;i++){
-                if($scope.cities[i].provinceId == newValue){
-                    $scope.citiesList.push($scope.cities[i]);
+            baseService.sendGet("/user/findCities","provinceId="+ newValue).then(function (response) {
+                if (response.data){
+                    $scope.citiesList = response.data
                 }
-            }
+            })
         }
     });
 
@@ -108,11 +104,11 @@ app.controller('userController', function($scope, $timeout, baseService){
         /*初始化地域集合*/
         $scope.areasList = [];
         if (newValue){
-            for (var i = 0;i <$scope.areas.length;i++){
-                if($scope.areas[i].cityId == newValue){
-                    $scope.areasList.push($scope.areas[i]);
+            baseService.sendGet("/user/findAreas","cityId="+ newValue).then(function (response) {
+                if (response.data){
+                    $scope.areasList = response.data
                 }
-            }
+            })
         }
     });
 
@@ -129,7 +125,6 @@ app.controller('userController', function($scope, $timeout, baseService){
                 }
                 /*转换为JOSN格式*/
                 $scope.user.address = JSON.parse(response.data.user.address);
-                cc
                 $scope.user.birthday = response.data.birthday;
             }else {
                 alert("获取用户信息失败!")

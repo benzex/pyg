@@ -146,18 +146,26 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /*获取所有的省 城市 地区*/
+    /*获取所有的省*/
     @Override
-    public Map<String, List> getAddress() {
-        Map<String,List> map = new HashMap<>();
+    public List<Provinces> findProvinces() {
         List<Provinces> provinces = provincesMapper.selectAll();
-        List<Cities> cities = citiesMapper.selectAll();
-        List<Areas> areas = areasMapper.selectAll();
+        return provinces;
+    }
 
-        map.put("provinces",provinces);
-        map.put("cities",cities);
-        map.put("areas",areas);
-        return map;
+    /*根据省份获取城市集合*/
+    @Override
+    public List<Cities> findCities(String provinceId) {
+        Cities cities = new Cities();
+        cities.setProvinceId(provinceId);
+        return citiesMapper.select(cities);
+    }
+
+    @Override
+    public List<Areas> findAreas(String cityId) {
+        Areas areas = new Areas();
+        areas.setCityId(cityId);
+        return areasMapper.select(areas);
     }
 
     /*查询用户信息*/
