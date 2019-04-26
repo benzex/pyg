@@ -261,8 +261,7 @@ public class OrderServiceImpl implements OrderService {
 					ObjectMapper objectMapper = new ObjectMapper();
 					String orderJ = objectMapper.writeValueAsString(order);
 					Map<String,Object> orderMap = JSON.parseObject(orderJ, Map.class);
-
-
+					orderMap.put("orderId",orderMap.get("orderId").toString());
 					orderMap.put("createTime",simpleDateFormat.format(order.getCreateTime()));
 					Example example1 = new Example(OrderItem.class);
 					example1.createCriteria().andEqualTo("orderId", order.getOrderId());
@@ -290,6 +289,16 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 
+
+	}
+
+	@Override
+	public Order findOrderbyOrderId(String orderId) {
+		Example example = new Example(Order.class);
+		Example.Criteria criteria = example.createCriteria();
+		criteria.andEqualTo("orderId",orderId);
+		List<Order> orders = (List<Order>) orderMapper.selectByExample(example);
+		return orders.get(0);
 
 	}
 }

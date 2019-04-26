@@ -43,4 +43,6 @@ public interface OrderService {
     void updatePayStatus(String outTradeNo, String transactionId);
 
 	PageResult findOrderByUserIdPage(String userId, int page , int rows);
+
+	Order findOrderbyOrderId(String orderId);
 }

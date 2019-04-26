@@ -227,7 +227,9 @@
                             </div>
 
                             <!--order1-->
+
                             <div ng-repeat="order in orderList">
+
                                 <div class="choose-title">
                                     <label data-toggle="checkbox" >
                                         <input type="checkbox" >
@@ -264,12 +266,13 @@
                                         <td width="10%" class="center">
                                             <ul class="unstyled">
                                                 <li>等待卖家付款</li>
-                                                <li><a href="orderDetail.html" class="btn">订单详情 </a></li>
+                                                <li><a href="home-orderDetail.html" class="btn">订单详情 </a></li>
                                             </ul>
                                         </td>
                                         <td width="10%" class="center">
                                             <ul class="unstyled">
-                                                <li><a href="#" class="sui-btn btn-info" ng-if="order.status=='1'">立即付款</a></li>
+                                                <li><a href="/order/pay.html?orderId={{order.orderId}}"
+                                                       class="sui-btn btn-info" ng-if="order.status=='1'">立即付款</a></li>
                                                 <li><a href="#" class="sui-btn btn-info" ng-if="order.status=='2'">提醒发货</a></li>
                                                 <li>取消订单</li>
 
@@ -286,6 +289,7 @@
                                 <div class="sui-pagination pagination-large top-pages">
                                     <ul>
                                         <li class="prev {{page==1?'disabled':''}}"><a href="#" ng-click="getOrderByUserId(page-1)">«上一页</a></li>
+                                        <li class="dotted" ng-if="firstD"><span>...</span></li>
                                         <li class="{{page==num?'active':''}}" ng-repeat="num in pageNum">
                                             <a href="javascript:;" ng-click="getOrderByUserId(num)">{{num}}</a></li>
                                         <li class="dotted"><span>...</span></li>
