@@ -253,16 +253,21 @@ public class OrderServiceImpl implements OrderService {
 					orderMapper.selectByExample(example);
 				}
 			});
+
 			List<Order> orderList = pageInfo.getList();
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
 			if (orderList != null && orderList.size() > 0) {
 				for (Order order : orderList) {
 					List<Map<String,Object>> orderItemMap = new ArrayList<>();
+
 					ObjectMapper objectMapper = new ObjectMapper();
 					String orderJ = objectMapper.writeValueAsString(order);
+
 					Map<String,Object> orderMap = JSON.parseObject(orderJ, Map.class);
 					orderMap.put("orderId",orderMap.get("orderId").toString());
 					orderMap.put("createTime",simpleDateFormat.format(order.getCreateTime()));
+
 					Example example1 = new Example(OrderItem.class);
 					example1.createCriteria().andEqualTo("orderId", order.getOrderId());
 					List<OrderItem> orderItems = orderItemMapper.selectByExample(example1);
@@ -299,6 +304,5 @@ public class OrderServiceImpl implements OrderService {
 		criteria.andEqualTo("orderId",orderId);
 		List<Order> orders = (List<Order>) orderMapper.selectByExample(example);
 		return orders.get(0);
-
 	}
 }

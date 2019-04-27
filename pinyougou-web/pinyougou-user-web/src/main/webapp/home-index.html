@@ -219,81 +219,105 @@
                             <div class="choose-order">
                                 <div class="sui-pagination pagination-large top-pages">
                                     <ul>
-                                        <li class="prev {{page==1?'disabled':''}}"><a href="#" ng-click="getOrderByUserId(page-1)">«上一页</a></li>
+                                        <li class="prev {{page==1?'disabled':''}}"><a href="#"
+                                                                                      ng-click="getOrderByUserId(page-1)">«上一页</a>
+                                        </li>
 
-                                        <li class="next {{page==totalPage?'disabled':''}}"><a href="javascript:;" ng-click="getOrderByUserId(page+1)">下一页»</a></li>
+                                        <li class="next {{page==totalPage?'disabled':''}}"><a href="javascript:;"
+                                                                                              ng-click="getOrderByUserId(page+1)">下一页»</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
 
                             <!--order1-->
-
                             <div ng-repeat="order in orderList">
 
                                 <div class="choose-title">
-                                    <label data-toggle="checkbox" >
-                                        <input type="checkbox" >
+                                    <label data-toggle="checkbox">
+                                        <input type="checkbox">
                                         <span>{{order.createTime}}　订单编号：{{order.orderId}}  店铺：{{order.sellerId}}
                                             <a>和我联系</a></span>
                                     </label>
                                     <a class="sui-btn btn-info share-btn">分享</a>
                                 </div>
-                                <table class="sui-table table-bordered order-datatable" ng-repeat="items in order.orderItems">
+                                <table class="sui-table table-bordered order-datatable">
                                     <tbody>
-                                    <tr>
+
+                                    <tr ng-repeat="item in order.orderItems">
                                         <td width="35%">
-                                            <div class="typographic"><img src="{{items.picPath}}" width="100px"/>
-                                                <a href="#" class="block-text">{{items.title}}</a>
-                                                <span class="guige">规格：{{items.spec}}</span>
+                                            <div class="typographic"><img src="{{item.picPath}}" width="100px"/>
+                                                <a href="#" class="block-text">{{item.title}}</a>
+                                                <span class="guige">规格：{{item.spec}}</span>
                                             </div>
                                         </td>
                                         <td width="5%" class="center">
                                             <ul class="unstyled">
-                                                <li class="o-price" ng-if="items.costPrice">¥{{items.costPrice.toFixed(2)}}</li>
-                                                <li>¥{{items.price.toFixed(2)}}</li>
+                                                <li class="o-price" ng-if="items.costPrice">
+                                                    ¥{{item.costPrice.toFixed(2)}}
+                                                </li>
+                                                <li>¥{{item.price.toFixed(2)}}</li>
                                             </ul>
                                         </td>
-                                        <td width="5%" class="center">1</td>
+                                        <td width="5%" class="center">{{item.num}}</td>
                                         <td width="8%" class="center">
-
-                                        </td>
-                                        <td width="10%" class="center">
                                             <ul class="unstyled">
-                                                <li>¥{{items.totalFee}}</li>
+                                                <li ng-if="order.status == 4">已发货</li>
+                                                <li ng-if="order.status == 3">未发货</li>
+                                                <li ng-if="order.status == 2">已发货</li>
+                                                <li ng-if="order.status == 1">未付款</li>
+                                            </ul>
+                                        </td>
+
+                                        <td width="10%" ng-if="$index==0" rowspan="2" class="center" >
+                                            <ul class="unstyled">
+                                                <li>¥{{order.payment}}</li>
                                                 <li>（含运费：￥0.00）</li>
                                             </ul>
                                         </td>
-                                        <td width="10%" class="center">
+                                        <td width="10%" ng-if="$index==0" rowspan="2" class="center">
                                             <ul class="unstyled">
-                                                <li>等待卖家付款</li>
-                                                <li><a href="home-orderDetail.html" class="btn">订单详情 </a></li>
+                                                <li ng-if="order.status=='1'">等待买家付款</li>
+                                                <li ng-if="order.status=='2'">买家已付款</li>
+                                                <li ng-if="order.status=='3'">卖家未发货</li>
+                                                <li ng-if="order.status=='4'">卖家已发货</li>
+                                                <li><a href="home-orderDetail.html?orderId={{order.orderId}}"
+                                                       class="btn">订单详情 </a></li>
                                             </ul>
                                         </td>
-                                        <td width="10%" class="center">
+                                        <td width="10%" ng-if="$index==0" rowspan="2" class="center">
                                             <ul class="unstyled">
                                                 <li><a href="/order/pay.html?orderId={{order.orderId}}"
                                                        class="sui-btn btn-info" ng-if="order.status=='1'">立即付款</a></li>
-                                                <li><a href="#" class="sui-btn btn-info" ng-if="order.status=='2'">提醒发货</a></li>
+                                                <li>
+                                                    <a href="#" class="sui-btn btn-info"
+                                                       ng-if="order.status=='2'">提醒发货</a>
+                                                </li>
                                                 <li>取消订单</li>
 
                                             </ul>
                                         </td>
                                     </tr>
-
-
                                     </tbody>
                                 </table>
 
                             </div>
+
+
+
+
                             <div class="choose-order">
                                 <div class="sui-pagination pagination-large top-pages">
                                     <ul>
-                                        <li class="prev {{page==1?'disabled':''}}"><a href="#" ng-click="getOrderByUserId(page-1)">«上一页</a></li>
+                                        <li class="prev {{page==1?'disabled':''}}"><a href="#" ng-click="getOrderByUserId(page-1)">«上一页</a>
+                                        </li>
                                         <li class="dotted" ng-if="firstD"><span>...</span></li>
                                         <li class="{{page==num?'active':''}}" ng-repeat="num in pageNum">
                                             <a href="javascript:;" ng-click="getOrderByUserId(num)">{{num}}</a></li>
-                                        <li class="dotted"><span>...</span></li>
-                                        <li class="next {{page==totalPage?'disabled':''}}"><a href="javascript:;" ng-click="getOrderByUserId(page+1)">下一页»</a></li>
+                                        <li class="dotted" ng-if="endD"><span>...</span></li>
+                                        <li class="next {{page==totalPage?'disabled':''}}"><a href="javascript:;"
+                                                                                              ng-click="getOrderByUserId(page+1)">下一页»</a>
+                                        </li>
                                     </ul>
                                     <div><span>共{{totalPage}}页&nbsp;</span><span>
                                             到

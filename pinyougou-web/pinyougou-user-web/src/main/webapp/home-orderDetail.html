@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<base href="/"/>
     <meta charset="UTF-8"/>
     <title>订单详情</title>
      <link rel="icon" href="/assets/img/favicon.ico"/>
-
     <link rel="stylesheet" type="text/css" href="/css/webbase.css"/>
-    
 	<link rel="stylesheet" type="text/css" href="/css/pages-seckillOrder.css"/>
 
+	<script src="/plugins/angularjs/angular.min.js"></script>
+	<script src="/js/base.js"></script>
+	<script src="/js/service/baseService.js"></script>
+	<script src="/js/controller/baseController.js"></script>
+	<script src="/js/controller/orderController.js"></script>
+	<script type="text/javascript">
+		app.config(function ($locationProvider) {
+			$locationProvider.html5Mode(true);
+        });
+	</script>
 </head>
 
-<body>
+<body ng-app="pinyougou" ng-controller="orderController" ng-init="getOrder();loadUsername()">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -20,10 +29,10 @@
 		<div class="top">
 			<div class="py-container">
 				<div class="shortcut">
-					<ul class="fl">
-						<li class="f-item">品优购欢迎您！</li>
-						<li class="f-item">请<a href="login.html" target="_blank">登录</a>　<span><a href="register.html" target="_blank">免费注册</a></span></li>
-					</ul>
+					<li class="f-item">
+						{{loginName}}, 品优购欢迎您！&nbsp;
+						<a href="http://sso.pinyougou.com/logout?service={{redirectUrl}}">退出</a>
+					</li>
 					<ul class="fr">
 						<li class="f-item">我的订单</li>
 						<li class="f-item space"></li>
@@ -252,18 +261,20 @@ $(function(){
                                     </div>
                             </div>
                             <div class="order-state">
-                                <p>当前订单状态：<span class="red">已发货</span></p>
+                                <p>当前订单状态：<span class="red" ng-if="order.status=='2'">已发货</span>
+                                    <span class="red" ng-if="order.status=='1'">未发货</span></p>
                                 <p>还剩06天00小时 自动确认收货</p>
                             </div>
                         </div>
+                        {{order}}
                         <div class="order-info">
                             <h5>订单信息</h5>
-                            <p>收货地址：神茶减肥茶就观察及噶盘滚啊  </p>
-                            <p>订单单号：178789758976986</p>
-                            <p>下单时间：2017-06-04 09：03：03</p>
-                            <p>支付时间：2017-06-05  09：03：03</p>
-                            <p>支付方式：微信</p>
-                            <p>发货时间：201707-06-06 09：03：03</p>
+                            <p>收货地址：{{order.receiverAreaName}}  </p>
+                            <p>订单单号：{{order.orderId}}</p>
+                            <p>下单时间：{{order.createTime |date:'yyyy-MM-dd HH:mm:ss'}}</p>
+                            <p>支付时间：{{order.paymentTime|date:'yyyy-MM-dd HH:mm:ss'}}</p>
+                            <p>支付方式：{{order.paymentType==1?'微信':'其他'}}</p>
+                            <p ng-if="order.status==2">发货时间：{{order.consignTime|date:'yyyy-MM-dd HH:mm:ss'}}</p>
                         </div>
                         <div class="order-goods">
                             <table class="sui-table">
@@ -277,12 +288,12 @@ $(function(){
                              
                                 <tbody>                               
                                     <tr>
-                                        <td colspan="5">订单编号：787587819591509</td>
+                                        <td colspan="5">订单编号：{{order.orderId}}</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <div class="typographic"><img src="img/goods.png" />
-                                                    <span>包邮 正品玛姬儿压缩面膜无纺布纸膜100粒 送泡瓶面膜刷喷瓶 新款</span>
+                                                    <span>{{order}}</span>
                                                     <span class="guige">规格：温泉喷雾150ml</span>
                                                 </div>
                                         </td>

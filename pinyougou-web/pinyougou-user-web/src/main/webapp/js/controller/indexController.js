@@ -7,7 +7,7 @@ app.controller('indexController', function ($scope, baseService) {
                 $scope.loginName = response.data.loginName;
             });
     };
-    $scope.rows = 2;
+    $scope.rows = 1;
     $scope.getOrderByUserId = function (page) {
         if (page < 1) {
             page = 1;
@@ -42,14 +42,12 @@ app.controller('indexController', function ($scope, baseService) {
                     $scope.endD = true;
                 } else {
                     start = totalPage - 5;
-                    $scope.firstD = false;
                 }
             } else {
                 end = 5;
                 $scope.endD = true;
             }
         }
-
 
         for (var i = start; i < end; i++) {
             $scope.pageNum.push(i + 1);
