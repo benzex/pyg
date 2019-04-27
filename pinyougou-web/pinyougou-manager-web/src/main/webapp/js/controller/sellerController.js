@@ -80,7 +80,7 @@ app.controller('sellerController', function($scope, $controller, baseService){
 
     //反选
     $scope.selectInverse = function (event) {
-        var idsTemp = [];
+       /* var idsTemp = [];
         angular.forEach($scope.dataList,function (data) {
                if(data.sellerId.checked ){
                    data.sellerId.checked = false;
@@ -89,7 +89,7 @@ app.controller('sellerController', function($scope, $controller, baseService){
                    idsTemp.push(data.sellerId);
                }
                $scope.ids = idsTemp;
-        });
+        });*/
 
     }
 

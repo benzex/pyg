@@ -80,8 +80,7 @@
 			                      </thead>
 			                      <tbody>
 			                          <tr ng-repeat="seller in dataList">
-			                              <td><input  type="checkbox" ng-model="seller.sellerId.checked"
-													  ng-checked = "{{seller.sellerId.checked==true?'checked':''}}"
+			                              <td><input  type="checkbox"
 													  ng-click="updateSelection($event,seller.sellerId)"></td>
 				                          <td>{{seller.sellerId}}</td>
 									      <td>{{seller.name}}</td>
@@ -97,7 +96,6 @@
 											  ng-click="show(seller)">详情</button>
 		                                  </td>
 			                          </tr>
-								  {{ids}}
 
 			                      </tbody>
 			                  </table>
