@@ -13,6 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 商家控制器
@@ -46,23 +50,18 @@ public class SellerController {
     }
 
 
-    /**
-     * 商家修改
-     */
+
+    //修改资料
     @PostMapping("/update")
     public boolean update(@RequestBody Seller seller) {
         try {
             if (seller.getPassword() != null) {
                 String newPassword = seller.getPassword();
-                System.out.println("新密码" + newPassword);
                 String password = passwordEncoder.encode(newPassword);
                 seller.setPassword(password);
             }
-            // 获取安全上下文对象
             SecurityContext context = SecurityContextHolder.getContext();
-            // 获取用户名
             String sellerId = context.getAuthentication().getName();
-            System.out.println(sellerId);
             sellerService.update(sellerId, seller);
             return true;
         } catch (Exception ex) {
@@ -71,23 +70,24 @@ public class SellerController {
         return false;
     }
 
-    /**
-     * 商家申请入驻
-     */
+    //页面验证旧密码
     @PostMapping("/checkps")
     public boolean check(@RequestBody Seller seller) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        // 获取安全上下文对象
-        SecurityContext context = SecurityContextHolder.getContext();
-        // 获取用户名
-        String sellerId = context.getAuthentication().getName();
         String password = seller.getPassword();
-        System.out.println("页面来的老密码" + password);
+        SecurityContext context = SecurityContextHolder.getContext();
+        String sellerId = context.getAuthentication().getName();
         String oldPassword = sellerService.findOne(sellerId).getPassword();
-        // return (oldPassword.equals(password));
-        System.out.println("yon" + encoder.matches(password, oldPassword));
         return encoder.matches(password, oldPassword);
-
-
+    }
+    //修改页面回显数据
+    @GetMapping("/findById")
+    public Seller findById2(){
+        SecurityContext context = SecurityContextHolder.getContext();
+        String sellerId = context.getAuthentication().getName();
+        Seller seller = sellerService.findOne(sellerId);
+        //防止密码传回页面时显示在response
+        seller.setPassword("*********");
+        return seller;
     }
 }
