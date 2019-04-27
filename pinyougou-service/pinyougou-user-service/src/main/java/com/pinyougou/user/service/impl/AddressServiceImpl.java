@@ -120,10 +120,11 @@ public class AddressServiceImpl implements AddressService {
         Address address = new Address();
         address.setIsDefault("1");
         List<Address> addressList = addressMapper.select(address);
-        if (addressList.size() > 0 && addressList != null){
+        if (addressList.size() > 0 && addressList != null) {
             addressList.get(0).setIsDefault("0");
             addressMapper.updateByPrimaryKeySelective(addressList.get(0));
         }
+        /*设定默认地址*/
         Address address1 = addressMapper.selectByPrimaryKey(id);
         address1.setIsDefault("1");
         addressMapper.updateByPrimaryKeySelective(address1);
