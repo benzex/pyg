@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -144,6 +145,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     /*获取所有的省*/
     @Override
     public List<Provinces> findProvinces() {
@@ -181,4 +183,12 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException();
         }
     }
+    @Override
+    public User loadsateUI(String remoteUser) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria().andEqualTo("username",remoteUser);
+        List<User> users = userMapper.selectByExample(example);
+        return users.get(0);
+    }
 }
+

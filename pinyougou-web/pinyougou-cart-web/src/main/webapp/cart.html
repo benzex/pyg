@@ -68,10 +68,12 @@
 		</div>
 		<!--All goods-->
 		<div class="allgoods">
-			<h4>全部商品<span>11</span></h4>
+			<h4>全部商品<span>{{totalNum}}</span></h4>
 			<div class="cart-main">
 				<div class="yui3-g cart-th">
-					<div class="yui3-u-1-4"><input type="checkbox" name="" value="" /> 全部</div>
+					<div class="yui3-u-1-4"><input type="checkbox" name="" value=""
+                                                   ng-click="allChoose($event)"
+                                                   ng-checked="clkd"/> 全部</div>
 					<div class="yui3-u-1-4">商品</div>
 					<div class="yui3-u-1-8">单价（元）</div>
 					<div class="yui3-u-1-8">数量</div>
@@ -81,7 +83,7 @@
 				<!-- 迭代产生商家 -->
 				<div class="cart-item-list" ng-repeat="cart in carts">
 					<div class="cart-shop">
-						<input type="checkbox" name="" value="" />
+						<input type="checkbox" name="" value="" ng-click="portChoose($event,cart.id,$index,cart);" ng-checked="portArray[cart.sellerId]"/>
 						<span class="shopname self">{{cart.sellerName}}</span>
 					</div>
 					<div class="cart-body">
@@ -89,11 +91,12 @@
 						<div class="cart-list" ng-repeat="orderItem in cart.orderItems">
 							<ul class="goods-list yui3-g">
 								<li class="yui3-u-1-24">
-									<input type="checkbox" name="" value="" />
+									<input type="checkbox" name="" value="" ng-click="choose($event,$index,item.itemId,item.totalFee,cart.sellerId)"
+                                           ng-checked="chooseArray[cart.sellerId][$index]" />
 								</li>
 								<li class="yui3-u-11-24">
 									<div class="good-item">
-										<div class="item-img"><img src="{{orderItem.picPath}}" /></div>
+										<div class="item-img"><a href="http://item.pinyougou.com/{{orderItem.goodsId}}"><img src="{{orderItem.picPath}}" /></div>
 										<div class="item-msg">{{orderItem.title}}</div>
 									</div>
 								</li>
@@ -127,7 +130,7 @@
 			</div>
 			<div class="cart-tool">
 				<div class="select-all">
-					<input type="checkbox" name="" value="" />
+                    <input type="checkbox" ng-click="allChoose($event)" ng-checked="clkd"/>
 					<span>全选</span>
 				</div>
 				<div class="option">
@@ -141,10 +144,10 @@
 						<span><em>总价（不含运费） ：</em>
 							<i class="summoney">¥{{totalEntity.totalMoney.toFixed(2)}}</i>
 						</span>
-						<span><em>已节省：</em><i>-¥20.00</i></span>
+						<span><em>已节省：</em><i>-¥0</i></span>
 					</div>
 					<div class="sumbtn">
-						<a class="sum-btn" href="/order/getOrderInfo.html" target="_blank">结算</a>
+						<a class="sum-btn" href="/order/getOrderInfo.html?ids={{ids}}" target="_blank">结算</a>
 					</div>
 				</div>
 			</div>

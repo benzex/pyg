@@ -20,8 +20,8 @@
 </head>
 
 <body class="hold-transition skin-red sidebar-mini"
-      ng-app="pinyougou"
-      ng-controller="sellerController">
+      ng-app="pinyougou" ng-controller="sellerController"
+	  ng-init="findById()">
 
 	<!-- 正文区域 -->
 	<section class="content">
@@ -47,12 +47,12 @@
 							<div class="col-md-2 title">公司名称</div>
 							<div class="col-md-10 data">
 								<input type="text"  class="form-control" ng-model="seller.name"
-									   placeholder="公司名称" value="">
+									   placeholder="公司名称" value="{{seller.name}}">
 							</div>
 
 							<div class="col-md-2 title">公司手机</div>
 							<div class="col-md-10 data">
-								<input type="text" ng-model="seller.Mobile"
+								<input type="text" ng-model="seller.mobile"
 									   class="form-control"  placeholder="公司手机" value="">
 							</div>
 
@@ -144,7 +144,7 @@
 					</div>
                         <div class="btn-toolbar list-toolbar">
                             <button class="btn btn-primary" ng-click="update()"><i class="fa fa-save"></i>保存</button>
-                            <a  data-toggle="modal"   class="btn btn-danger">提交</a>
+                            <a  data-toggle="modal" href="javascript:history.go(-1);"  class="btn btn-danger">取消</a>
                         </div>
                     </form>
 				</div>

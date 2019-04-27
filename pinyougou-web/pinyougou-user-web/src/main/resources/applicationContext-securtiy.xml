@@ -16,6 +16,7 @@
     <security:http pattern="/register.html" security="none"/>
     <security:http pattern="/user/save" security="none"/>
     <security:http pattern="/user/sendSmsCode" security="none"/>
+    <security:http pattern="/setting/updatePhone" security="none"/>
 
 
     <!-- 配置哪些URL需要拦截

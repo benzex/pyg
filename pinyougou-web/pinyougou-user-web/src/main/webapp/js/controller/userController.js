@@ -73,8 +73,8 @@ app.controller('userController', function($scope, $timeout, baseService){
         }
 
     };
-	
-	
+
+
 	/*获取所有的省*/
     $scope.getProvinces = function (){
         baseService.sendGet("/user/findProvinces").then(function (response) {

@@ -25,4 +25,5 @@ public interface SellerMapper extends Mapper<Seller>{
 
 
     void deleteByIds(Serializable[] ids);
+
 }
