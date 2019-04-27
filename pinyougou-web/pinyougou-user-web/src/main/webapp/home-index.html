@@ -232,7 +232,6 @@
 
                             <!--order1-->
                             <div ng-repeat="order in orderList">
-
                                 <div class="choose-title">
                                     <label data-toggle="checkbox">
                                         <input type="checkbox">
@@ -243,7 +242,6 @@
                                 </div>
                                 <table class="sui-table table-bordered order-datatable">
                                     <tbody>
-
                                     <tr ng-repeat="item in order.orderItems">
                                         <td width="35%">
                                             <div class="typographic"><img src="{{item.picPath}}" width="100px"/>
@@ -269,13 +267,13 @@
                                             </ul>
                                         </td>
 
-                                        <td width="10%" ng-if="$index==0" rowspan="2" class="center" >
+                                        <td width="10%" ng-if="$index==0" rowspan="{{order.orderItemsSize}}" class="center" >
                                             <ul class="unstyled">
                                                 <li>¥{{order.payment}}</li>
                                                 <li>（含运费：￥0.00）</li>
                                             </ul>
                                         </td>
-                                        <td width="10%" ng-if="$index==0" rowspan="2" class="center">
+                                        <td width="10%" ng-if="$index==0" rowspan="{{order.orderItemsSize}}" class="center">
                                             <ul class="unstyled">
                                                 <li ng-if="order.status=='1'">等待买家付款</li>
                                                 <li ng-if="order.status=='2'">买家已付款</li>
@@ -285,7 +283,7 @@
                                                        class="btn">订单详情 </a></li>
                                             </ul>
                                         </td>
-                                        <td width="10%" ng-if="$index==0" rowspan="2" class="center">
+                                        <td width="10%" ng-if="$index==0" rowspan="{{order.orderItemsSize}}" class="center">
                                             <ul class="unstyled">
                                                 <li><a href="/order/pay.html?orderId={{order.orderId}}"
                                                        class="sui-btn btn-info" ng-if="order.status=='1'">立即付款</a></li>

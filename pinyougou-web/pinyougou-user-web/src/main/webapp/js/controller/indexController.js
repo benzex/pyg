@@ -7,7 +7,7 @@ app.controller('indexController', function ($scope, baseService) {
                 $scope.loginName = response.data.loginName;
             });
     };
-    $scope.rows = 1;
+    $scope.rows = 2;
     $scope.getOrderByUserId = function (page) {
         if (page < 1) {
             page = 1;
@@ -54,7 +54,8 @@ app.controller('indexController', function ($scope, baseService) {
         }
 
 
-    }
+    };
+
 
 
 });
