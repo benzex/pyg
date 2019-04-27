@@ -93,7 +93,7 @@ app.controller('sellerController', function ($scope, $controller, baseService) {
                 if (response.data) {
                     /** 跳转到登录页面 */
                     alert("恭喜你,资料修改成功!");
-                    //location.href = "/shoplogin.html";
+                    location.href="javascript:history.go(-1);"
                 } else {
                     alert("操作失败！");
                 }
@@ -117,9 +117,7 @@ app.controller('sellerController', function ($scope, $controller, baseService) {
     $scope.updatePassword = function () {
         /** 发送post请求 */
 
-        alert($scope.seller.password);
         $scope.seller.password = $scope.newPassword1;
-        alert($scope.seller.password);
         baseService.sendPost("/seller/update", $scope.seller)
             .then(function (response) {
                 if (response.data) {
@@ -132,4 +130,25 @@ app.controller('sellerController', function ($scope, $controller, baseService) {
             });
 
     };
+
+    ///**数据回显的方法*/
+    //$scope.findById=function () {
+    //    baseService.sendGet("/seller/findById").then(function(response){
+    //        // 获取响应数据 List<Seller> [{},{}]
+    //        $scope.Seller = response.data;
+    //        $scope.seller=$scope.Seller[0];
+    //        $scope.seller.password=null;
+    //    });
+    //};
+
+    $scope.findById=function () {
+        baseService.sendGet("/seller/findById").then(function (response) {
+            // 获取响应数据 List<Seller> [{},{}]
+            $scope.seller = response.data;
+
+            $scope.seller.password = null;
+        });
+    }
+
+
 });

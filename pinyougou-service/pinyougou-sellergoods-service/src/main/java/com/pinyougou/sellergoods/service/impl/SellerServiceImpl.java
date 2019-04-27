@@ -69,6 +69,7 @@ public class SellerServiceImpl implements SellerService {
         return sellerMapper.selectByPrimaryKey(id);
     }
 
+
     @Override
     public List<Seller> findAll() {
         return null;
