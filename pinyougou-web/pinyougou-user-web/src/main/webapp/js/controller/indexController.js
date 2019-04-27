@@ -42,7 +42,6 @@ app.controller('indexController', function ($scope, baseService) {
                     $scope.endD = true;
                 } else {
                     start = totalPage - 5;
-                    $scope.firstD = false;
                 }
             } else {
                 end = 5;
@@ -50,13 +49,13 @@ app.controller('indexController', function ($scope, baseService) {
             }
         }
 
-
         for (var i = start; i < end; i++) {
             $scope.pageNum.push(i + 1);
         }
 
 
-    }
+    };
+
 
 
 });

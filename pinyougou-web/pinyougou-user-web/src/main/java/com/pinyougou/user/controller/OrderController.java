@@ -59,4 +59,9 @@ public class OrderController  {
 		}
 		return data;
 	}
+
+	@GetMapping("/getOrder")
+	public Order getOrder(String orderId){
+		return orderService.findOrderbyOrderId(orderId);
+	}
 }

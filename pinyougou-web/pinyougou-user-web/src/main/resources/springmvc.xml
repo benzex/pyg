@@ -49,4 +49,5 @@
     <!-- 配置包扫描的方式引用服务(它底层实现层的组件扫描) -->
     <dubbo:annotation package="com.pinyougou.user.controller"/>
 
+
 </beans>

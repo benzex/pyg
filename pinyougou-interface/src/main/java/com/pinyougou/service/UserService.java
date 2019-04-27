@@ -42,6 +42,8 @@ public interface UserService {
 	/** 检验验证码是否正确 */
 	boolean checkSmsCode(String phone, String code);
 
+    User loadsateUI(String remoteUser);
+
 	/*获取所有的省*/
 	List<Provinces> findProvinces();
 
@@ -53,4 +55,5 @@ public interface UserService {
 
 	/*查询用户信息*/
 	Map<String,Object> findOneByLoginName(String loginName);
+
 }

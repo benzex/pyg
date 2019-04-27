@@ -2,7 +2,6 @@ package com.pinyougou.order.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
@@ -19,7 +18,6 @@ import com.pinyougou.pojo.Order;
 import com.pinyougou.pojo.OrderItem;
 import com.pinyougou.pojo.PayLog;
 import com.pinyougou.service.OrderService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +26,10 @@ import tk.mybatis.mapper.entity.Example;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 订单服务接口实现类
@@ -40,27 +41,26 @@ import java.util.*;
 @Service(interfaceName = "com.pinyougou.service.OrderService")
 @Transactional
 public class OrderServiceImpl implements OrderService {
-
-	@Autowired
-	private OrderMapper orderMapper;
-	@Autowired
-	private OrderItemMapper orderItemMapper;
-	@Autowired
-	private RedisTemplate redisTemplate;
-	@Autowired
-	private IdWorker idWorker;
-	@Autowired
-	private PayLogMapper payLogMapper;
-	@Autowired
-	private ItemMapper itemMapper;
+    @Autowired
+    private OrderMapper orderMapper;
+    @Autowired
+    private OrderItemMapper orderItemMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private IdWorker idWorker;
+    @Autowired
+    private PayLogMapper payLogMapper;
+    @Autowired
+    private ItemMapper itemMapper;
 
 	@Override
 	public void save(Order order) {
 		try {
 
-			// 获取该用户的购物车
-			List<Cart> cartList = (List<Cart>) redisTemplate
-					.boundValueOps("cart_" + order.getUserId()).get();
+            // 获取该用户的购物车
+            List<Cart> cartList = (List<Cart>)redisTemplate
+                    .boundValueOps("cartOrder_" + order.getUserId()).get();
 
 			// 定义支付的总金额
 			double totalMoney = 0;
@@ -97,62 +97,63 @@ public class OrderServiceImpl implements OrderService {
 				order1.setSellerId(cart.getSellerId());
 
 
-				// 定义订单总金额
-				double money = 0;
+                // 定义订单总金额
+                double money = 0;
 
-				// 迭代商家购物车中的商品
-				for (OrderItem orderItem : cart.getOrderItems()) {
-					// 设置主键id
-					orderItem.setId(idWorker.nextId());
-					// 设置关联的订单id
-					orderItem.setOrderId(orderId);
+                // 迭代商家购物车中的商品
+                for (OrderItem orderItem : cart.getOrderItems()) {
+                    // 设置主键id
+                    orderItem.setId(idWorker.nextId());
+                    // 设置关联的订单id
+                    orderItem.setOrderId(orderId);
 
-					// 计算订单的总金额
-					money += orderItem.getTotalFee().doubleValue();
+                    // 计算订单的总金额
+                    money += orderItem.getTotalFee().doubleValue();
 
-					// 往tb_order_item表插入数据
-					orderItemMapper.insertSelective(orderItem);
-				}
+                    // 往tb_order_item表插入数据
+                    orderItemMapper.insertSelective(orderItem);
+                }
 
-				// 多个订单累加(支付总金额)
-				totalMoney += money;
-				// 拼接多个订单号
-				orderIds += orderId + ",";
+                // 多个订单累加(支付总金额)
+                totalMoney += money;
+                // 拼接多个订单号
+                orderIds += orderId + ",";
 
-				// 订单支付的总金额
-				order1.setPayment(new BigDecimal(money));
-				// 往tb_order表插入数据
-				orderMapper.insertSelective(order1);
-			}
+                // 订单支付的总金额
+                order1.setPayment(new BigDecimal(money));
+                // 往tb_order表插入数据
+                orderMapper.insertSelective(order1);
+            }
 
-			// 生成支付日志(多个订单生成一次支付)
-			if ("1".equals(order.getPaymentType())) { // 在线支付
-				PayLog payLog = new PayLog();
-				// 交易订单号
-				payLog.setOutTradeNo(String.valueOf(idWorker.nextId()));
-				// 创建时间
-				payLog.setCreateTime(new Date());
-				// 支付总金额
-				payLog.setTotalFee((long) (totalMoney * 100));
-				// 支付用户
-				payLog.setUserId(order.getUserId());
-				// 交易状态: 未支付
-				payLog.setTradeState("0");
-				// 多个订单号，中间用逗号分隔
-				payLog.setOrderList(orderIds.substring(0, orderIds.length() - 1));
-				// 支付类型
-				payLog.setPayType(order.getPaymentType());
+            // 生成支付日志(多个订单生成一次支付)
+            if ("1".equals(order.getPaymentType())){ // 在线支付
+                PayLog payLog = new PayLog();
+                // 交易订单号
+                payLog.setOutTradeNo(String.valueOf(idWorker.nextId()));
+                // 创建时间
+                payLog.setCreateTime(new Date());
+                // 支付总金额
+                payLog.setTotalFee((long)(totalMoney * 100));
+                // 支付用户
+                payLog.setUserId(order.getUserId());
+                // 交易状态: 未支付
+                payLog.setTradeState("0");
+                // 多个订单号，中间用逗号分隔
+                payLog.setOrderList(orderIds.substring(0, orderIds.length() - 1));
+                // 支付类型
+                payLog.setPayType(order.getPaymentType());
 
 				// 往支付日志表中插入数据
 				payLogMapper.insertSelective(payLog);
 
-				// 把最新需要支付的日志存入Redis
-				redisTemplate.boundValueOps("payLog_" + order.getUserId()).set(payLog);
-			}
+                // 把最新需要支付的日志存入Redis
+                redisTemplate.boundValueOps("payLog_" + order.getUserId()).set(payLog);
+            }
 
 
-			// 删除Redis中购物车数据
-			redisTemplate.delete("cart_" + order.getUserId());
+
+            // 删除Redis中购物车数据
+            redisTemplate.delete("cartOrder_" + order.getUserId());
 
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -287,9 +288,6 @@ public class OrderServiceImpl implements OrderService {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-
-
-
 	}
 
 	@Override
@@ -300,5 +298,19 @@ public class OrderServiceImpl implements OrderService {
 		List<Order> orders = (List<Order>) orderMapper.selectByExample(example);
 		return orders.get(0);
 
+	}
+
+	@Override
+	public List<Cart> findCartOrderRedis(String user) {
+		try {
+			return (List<Cart>) redisTemplate.boundValueOps("cartOrder_"+user).get();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public void addOrderCartRedis(List<Cart> orderCarts, String user) {
+		redisTemplate.boundValueOps("cartOrder_"+user).set(orderCarts);
 	}
 }
