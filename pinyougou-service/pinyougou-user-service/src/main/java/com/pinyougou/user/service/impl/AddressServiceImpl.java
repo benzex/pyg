@@ -2,7 +2,13 @@ package com.pinyougou.user.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.mapper.AddressMapper;
+import com.pinyougou.mapper.AreasMapper;
+import com.pinyougou.mapper.CitiesMapper;
+import com.pinyougou.mapper.ProvincesMapper;
 import com.pinyougou.pojo.Address;
+import com.pinyougou.pojo.Areas;
+import com.pinyougou.pojo.Cities;
+import com.pinyougou.pojo.Provinces;
 import com.pinyougou.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,20 +30,26 @@ public class AddressServiceImpl implements AddressService {
 
     @Autowired
     private AddressMapper addressMapper;
+    @Autowired
+    private ProvincesMapper provincesMapper;
+    @Autowired
+    private CitiesMapper citiesMapper;
+    @Autowired
+    private AreasMapper areasMapper;
 
     @Override
     public void save(Address address) {
-
+        addressMapper.insert(address);
     }
 
     @Override
     public void update(Address address) {
-
+        addressMapper.updateByPrimaryKeySelective(address);
     }
 
     @Override
     public void delete(Serializable id) {
-
+        addressMapper.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -77,5 +89,44 @@ public class AddressServiceImpl implements AddressService {
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
+    }
+
+    /*获取所有的省*/
+    @Override
+    public List<Provinces> findProvinces() {
+        List<Provinces> provinces = provincesMapper.selectAll();
+        return provinces;
+    }
+
+    /*根据省份获取城市集合*/
+    @Override
+    public List<Cities> findCities(String provinceId) {
+        Cities cities = new Cities();
+        cities.setProvinceId(provinceId);
+        return citiesMapper.select(cities);
+    }
+
+    @Override
+    public List<Areas> findAreas(String cityId) {
+        Areas areas = new Areas();
+        areas.setCityId(cityId);
+        return areasMapper.select(areas);
+    }
+
+    /*设置默认地址*/
+    @Override
+    public void changeDefault(Long id) {
+        /*撤销原先的默认地址*/
+        Address address = new Address();
+        address.setIsDefault("1");
+        List<Address> addressList = addressMapper.select(address);
+        if (addressList.size() > 0 && addressList != null) {
+            addressList.get(0).setIsDefault("0");
+            addressMapper.updateByPrimaryKeySelective(addressList.get(0));
+        }
+        /*设定默认地址*/
+        Address address1 = addressMapper.selectByPrimaryKey(id);
+        address1.setIsDefault("1");
+        addressMapper.updateByPrimaryKeySelective(address1);
     }
 }

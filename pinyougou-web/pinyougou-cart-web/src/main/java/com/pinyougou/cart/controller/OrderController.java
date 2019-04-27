@@ -34,24 +34,29 @@ public class OrderController {
     @Reference(timeout = 5000)
     private CartService cartService;
 
-    /** 保存订单 */
+
+    /**
+     * 保存订单
+     */
     @PostMapping("/save")
-    public boolean save(@RequestBody Order order, HttpServletRequest request){
+    public boolean save(@RequestBody Order order, HttpServletRequest request) {
         try {
             // 获取登录用户名
             String userId = request.getRemoteUser();
             order.setUserId(userId);
             orderService.save(order);
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return false;
     }
 
-    /** 生成微信支付 */
+    /**
+     * 生成微信支付
+     */
     @GetMapping("/genPayCode")
-    public Map<String, Object> genPayCode(HttpServletRequest request){
+    public Map<String, Object> genPayCode(HttpServletRequest request) {
         // 获取登录用户名
         String userId = request.getRemoteUser();
         // 从Redis数据库中获取支付日志
@@ -59,18 +64,20 @@ public class OrderController {
         return weixinPayService.genPayCode(payLog.getOutTradeNo(), payLog.getTotalFee() + "");
     }
 
-    /** 检测支付状态 */
+    /**
+     * 检测支付状态
+     */
     @GetMapping("/queryPayStatus")
-    public Map<String, Integer> queryPayStatus(String outTradeNo){
+    public Map<String, Integer> queryPayStatus(String outTradeNo) {
         Map<String, Integer> data = new HashMap<>();
         data.put("status", 3);
         try {
             // 调用微信支付服务接口
-            Map<String,String> resMap = weixinPayService.queryPayStatus(outTradeNo);
+            Map<String, String> resMap = weixinPayService.queryPayStatus(outTradeNo);
 
-            if (resMap != null){
+            if (resMap != null) {
                 // SUCCESS-支付成功
-                if ("SUCCESS".equals(resMap.get("trade_state"))){
+                if ("SUCCESS".equals(resMap.get("trade_state"))) {
 
                     // 支付成功，修改支付日志的状态、订单的状态
                     orderService.updatePayStatus(outTradeNo, resMap.get("transaction_id"));
@@ -78,15 +85,16 @@ public class OrderController {
                     data.put("status", 1);
                 }
                 // NOTPAY—未支付
-                if ("NOTPAY".equals(resMap.get("trade_state"))){
+                if ("NOTPAY".equals(resMap.get("trade_state"))) {
                     data.put("status", 2);
                 }
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return data;
     }
+
     @GetMapping("/findCartOrder")
     public List<Cart> findCartOrder(Long[] itemIds) {
         String user = request.getRemoteUser();
@@ -134,8 +142,9 @@ public class OrderController {
                 cartService.saveCartRedis(user, newCartRedis);
             }
 
+
         }
         return orderCarts;
     }
-}
 
+}

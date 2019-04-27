@@ -1,4 +1,3 @@
-
 package com.pinyougou.user.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -145,6 +144,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException(ex);
         }
     }
+
 
     /*获取所有的省*/
     @Override
