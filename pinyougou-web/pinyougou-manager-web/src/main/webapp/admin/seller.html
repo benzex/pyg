@@ -43,8 +43,10 @@
                             
                             <div class="box-tools pull-right">
                                 <div class="has-feedback">
-									{{ids}}
-									<button class="btn btn-danger pull-left" ng-click="delete()" >删除</button>
+									<button class="btn btn-danger " ng-click="delete()" >删除</button>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									&nbsp;
 							        公司名称：<input  ng-model="searchEntity.name">
 									店铺名称： <input  ng-model="searchEntity.nickName">
 									状态：
@@ -63,7 +65,8 @@
 			                      <thead>
 			                          <tr >
 			                              <th class="" style="padding-right:0px">
-			                                  <input id="selall" type="checkbox" class="icheckbox_square-blue"
+			                                  <input id="selall" type="checkbox" ng-model="select_inverse"
+													 class="icheckbox_square-blue"
 											   ng-click="selectInverse($event)">
 			                              </th>
 										  <th class="sorting_asc">商家ID</th>
@@ -77,7 +80,9 @@
 			                      </thead>
 			                      <tbody>
 			                          <tr ng-repeat="seller in dataList">
-			                              <td><input  type="checkbox" ng-click="updateSelection($event,seller.sellerId)"></td>
+			                              <td><input  type="checkbox" ng-model="seller.sellerId.checked"
+													  ng-checked = "{{seller.sellerId.checked==true?'checked':''}}"
+													  ng-click="updateSelection($event,seller.sellerId)"></td>
 				                          <td>{{seller.sellerId}}</td>
 									      <td>{{seller.name}}</td>
 									      <td>{{seller.nickName}}</td>
@@ -92,6 +97,7 @@
 											  ng-click="show(seller)">详情</button>
 		                                  </td>
 			                          </tr>
+								  {{ids}}
 
 			                      </tbody>
 			                  </table>

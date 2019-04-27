@@ -79,33 +79,20 @@ app.controller('sellerController', function($scope, $controller, baseService){
 
 
     //反选
-    $scope.selectInverse = function () {
-        $scope.idsTemp = [];
-        var flag = 0;
-        var idsStrArr = JSON.parse(JSON.stringify($scope.ids));
-
+    $scope.selectInverse = function (event) {
+        var idsTemp = [];
         angular.forEach($scope.dataList,function (data) {
-                angular.forEach(idsStrArr, function (value, index){
-                    if(value == data.sellerId){/*原来选中的*/
-                         flag = 1;
-                    }
-                });
-                if(flag != 1){//原来没选中
-                    flag = 0;
-                    $scope.idsTemp.push(data.sellerId);
-                }
+               if(data.sellerId.checked ){
+                   data.sellerId.checked = false;
+               }else {
+                   data.sellerId.checked = true;
+                   idsTemp.push(data.sellerId);
+               }
+               $scope.ids = idsTemp;
         });
 
-        /*for(var i = 0; i<$scope.dataList.length ; i++){
-
-            var entity = $scope.dataList[j];
-            for (var j = 0; j<$scope.ids.length ; j++){
-
-                if($scope.ids[j] != $scope.dataList[i].sellerId){//原来没选中的
-                    $scope.idsTemp.push($scope.dataList[i].sellerId);
-                }
-            }
-        }*/
-        $scope.ids = $scope.idsTemp;
     }
+
+
+
 });
